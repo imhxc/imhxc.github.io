@@ -269,6 +269,196 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/22/2018年第4周总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="侯先诚">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="侯先诚">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/22/2018年第4周总结/" itemprop="url">2018年第4周总结</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-22T18:27:25+08:00">
+                2018-01-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/每周总结/" itemprop="url" rel="index">
+                    <span itemprop="name">每周总结</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2018/01/22/2018年第4周总结/#SOHUCS" itemprop="discussionUrl">
+                  <span id="url::http://yoursite.com/2018/01/22/2018年第4周总结/" class="cy_cmt_count" data-xid="2018/01/22/2018年第4周总结/" itemprop="commentsCount" ></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="2018年第4周总结"><a href="#2018年第4周总结" class="headerlink" title="2018年第4周总结"></a>2018年第4周总结</h2><blockquote>
+<p>今天是第五周的第一天, 周一。</p>
+<p>上周工作任务较少, 所以这周利用了大量余下的时间来阅读, 吸收新的知识, 回顾旧知识。</p>
+</blockquote>
+<h3 id="上周阅读记录"><a href="#上周阅读记录" class="headerlink" title="上周阅读记录"></a>上周阅读记录</h3><ul>
+<li>《ES6标准入门》<ul>
+<li>第15章 - Generator函数</li>
+<li>第16章 - Promise对象</li>
+<li>第17章 - 异步操作和async函数</li>
+</ul>
+</li>
+<li>《深入理解ES6》<ul>
+<li>第08章 - 迭代器(Iterator)和生成器(Generator)</li>
+<li>第11章 - Promise与异步编程</li>
+</ul>
+</li>
+<li>《JavaScript高级程序设计》<ul>
+<li>第10章 - DOM</li>
+<li>第21章 - Ajax与Comet </li>
+</ul>
+</li>
+</ul>
+<h3 id="阅读小结"><a href="#阅读小结" class="headerlink" title="阅读小结"></a>阅读小结</h3><p>上周主要是针对异步编程这一方面进行了深入理解, 对ES6中针对异步编程提出的新的解决方案有了一个基本认识。</p>
+<p>异步编程是JS中频繁出现的, 当遇到复杂项目的时候, 常常会陷入一种”回调地狱”(也有人称为回调噩梦)的尴尬境地, 也就是我们常常遇到的多层回调前套问题。</p>
+<p>其实这一问题ES6之前便有了解决方案, 只不过总是那么不尽人意。曾经红极一时的jQuery, 其实就已经针对异步编程做了相关的优化来便于我们使用。</p>
+<p>在ES6中, 出现了Generator 和 Promise 的编程方式。严格意义上来说, Generator和Promise并不属于ES6,  前面已经说了,很早之前就已经有了, jQuery中就有Promise对象, 只不过绝大多数的我们并不常使用到。ES6将其写入了标准, 统一了用法。</p>
+<p>Generator 通过<code>yield</code>、<code>next()</code>语句和方法来实现同步操作, 但是我们需要注意的是, 这种同步操作只是一种假象, 它只是将异步操作进行同步化, 本质还是异步操作。</p>
+<p>Promise也是针对异步操作提出的一套标准, 通过构造函数的方式来实例一个对象。该promise对象有三种状态: <code>pending</code>、<code>resolved</code>、<code>rejected</code>, 分别对应这进心中、成功、失败这三种状态。根据请求的结果来进行<code>resolve()</code>或<code>reject()</code>来返回结果。在外部, 我们可以通过<code>then</code>和<code>catch</code>方法来接收返回的数据和处理失败的结果。</p>
+<p>ES7中提出了<code>async</code>来处理异步编程操作, 他的出现, 让Promise和Generator 都像是一种过度的处理方式。通俗地讲, <code>ansync</code>就是Generator的语法糖, 可以让我们更加方便的来操作异步。</p>
+<p>最后, 对于JS中的Ajax操作和跨域处理, 则更进一步的加深了印象。JSONP作为曾经的跨域解决技术在一步一步的被放弃, 对于最近流行的websockets技术, 我们可以针对实际的开发场景来选择是否一定要使用websockets, 获取我们可以使用HTTP流和SSE来实现我们的需求, 因为这两种方式也可以实现从服务端推送消息到浏览器。</p>
+<h2 id="上周小结"><a href="#上周小结" class="headerlink" title="上周小结"></a>上周小结</h2><p>对于上周的阅读量还算满意。对异步编程和ES6的相关语法有了新的认识, 另外, 也了解了一些基础的HTTP协议的内容和Nodejs的入门知识。</p>
+<p>另外, 这几天眼睛是太舒服。今天还去趟牙科医院, 花了近2000块, 心疼。身体才是革命的本钱, 要适当的休息了。</p>
+<h2 id="本周目标"><a href="#本周目标" class="headerlink" title="本周目标"></a>本周目标</h2><ul>
+<li>掌握Node基础知识搭建一个小的demo</li>
+<li>温习JS的设计模式 - 单例模式</li>
+<li>掌握websocket</li>
+<li>阅读《JavaScript高级程序设计》第11、12章</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/19/JS原生Ajax探析-XMLHttpRequest/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1551,7 +1741,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -1562,7 +1752,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
