@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="NodeJs," />
 
 
 
@@ -79,14 +79,20 @@
 
 
 
+<meta name="description" content="文件数据的传输是浏览器与服务器之间的交互最为频繁, 在一般的Apache、Nginx等服务器上, 我们可以很轻松的传递文件数据, 但是在Node中, 如果不借助一些框架, 对于文件的处理会稍微繁琐。下面是我整理原生Node下的文件接受方式。学习Node对我们有很大的帮助, 其中之一就是可以让我们了解服务器和一些语言在处理响应的数据时, 底层是如何做的。这篇文章就可以很好的帮助我们了解其他一些框架">
+<meta name="keywords" content="NodeJs">
 <meta property="og:type" content="article">
 <meta property="og:title" content="node文件数据上传原理">
 <meta property="og:url" content="http://yoursite.com/2018/02/01/node文件数据上传原理/index.html">
 <meta property="og:site_name" content="侯先诚">
+<meta property="og:description" content="文件数据的传输是浏览器与服务器之间的交互最为频繁, 在一般的Apache、Nginx等服务器上, 我们可以很轻松的传递文件数据, 但是在Node中, 如果不借助一些框架, 对于文件的处理会稍微繁琐。下面是我整理原生Node下的文件接受方式。学习Node对我们有很大的帮助, 其中之一就是可以让我们了解服务器和一些语言在处理响应的数据时, 底层是如何做的。这篇文章就可以很好的帮助我们了解其他一些框架">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-01T03:51:47.374Z">
+<meta property="og:image" content="http://oscyun0zw.bkt.clouddn.com/QQ20180202-134108@2x.png">
+<meta property="og:updated_time" content="2018-02-02T05:47:48.792Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="node文件数据上传原理">
+<meta name="twitter:description" content="文件数据的传输是浏览器与服务器之间的交互最为频繁, 在一般的Apache、Nginx等服务器上, 我们可以很轻松的传递文件数据, 但是在Node中, 如果不借助一些框架, 对于文件的处理会稍微繁琐。下面是我整理原生Node下的文件接受方式。学习Node对我们有很大的帮助, 其中之一就是可以让我们了解服务器和一些语言在处理响应的数据时, 底层是如何做的。这篇文章就可以很好的帮助我们了解其他一些框架">
+<meta name="twitter:image" content="http://oscyun0zw.bkt.clouddn.com/QQ20180202-134108@2x.png">
 
 
 
@@ -347,7 +353,16 @@
       
 
       
-        
+        <blockquote>
+<p>文件数据的传输是浏览器与服务器之间的交互最为频繁, 在一般的Apache、Nginx等服务器上, 我们可以很轻松的传递文件数据, 但是在Node中, 如果不借助一些框架, 对于文件的处理会稍微繁琐。下面是我整理原生Node下的文件接受方式。<br>学习Node对我们有很大的帮助, 其中之一就是可以让我们了解服务器和一些语言在处理响应的数据时, 底层是如何做的。这篇文章就可以很好的帮助我们了解其他一些框架、语言以及服务器是如何处理文件的传输的。</p>
+</blockquote>
+<h2 id="简单的数据传递"><a href="#简单的数据传递" class="headerlink" title="简单的数据传递"></a>简单的数据传递</h2><blockquote>
+<p>相较而言, 我们日常开发中最常用的还是一些文本类的数据传输。对于文本类的数据请求, 在Node中也很好处理。</p>
+</blockquote>
+<h3 id="GET请求"><a href="#GET请求" class="headerlink" title="GET请求"></a>GET请求</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> url = <span class="built_in">require</span>(<span class="string">'url'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">request, response</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> urlObj = url.parse(request.url, <span class="literal">true</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(urlObj.query);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">server.listen(<span class="number">8080</span>);</span><br></pre></td></tr></table></figure>
+<p>打印结果: </p>
+<p><img src="http://oscyun0zw.bkt.clouddn.com/QQ20180202-134108@2x.png" alt="sss"></p>
+
       
     </div>
     
@@ -361,6 +376,12 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NodeJs/" rel="tag"># NodeJs</a>
+          
+        </div>
       
 
       
@@ -440,8 +461,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -478,7 +508,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -517,6 +547,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单的数据传递"><span class="nav-number">1.</span> <span class="nav-text">简单的数据传递</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#GET请求"><span class="nav-number">1.1.</span> <span class="nav-text">GET请求</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
