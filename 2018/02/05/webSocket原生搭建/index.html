@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="WebScoket," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="基于node搭建的原生websocket。">
+<meta name="keywords" content="WebScoket">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webSocket原生搭建">
+<meta property="og:url" content="http://yoursite.com/2018/02/05/webSocket原生搭建/index.html">
+<meta property="og:site_name" content="侯先诚">
+<meta property="og:description" content="基于node搭建的原生websocket。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-05T13:07:19.198Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webSocket原生搭建">
+<meta name="twitter:description" content="基于node搭建的原生websocket。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/05/webSocket原生搭建/"/>
+
+
+
+
+
+  <title>webSocket原生搭建 | 侯先诚</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">侯先诚</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">侯先诚的个人博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/05/webSocket原生搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="侯先诚">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="侯先诚">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">webSocket原生搭建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-05T10:58:14+08:00">
+                2018-02-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2018/02/05/webSocket原生搭建/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/02/05/webSocket原生搭建/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  基于node搭建的原生websocket。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>目前绝大多数并没有直接使用websocket原生技术, 而是使用了socket.io这样的库。当然, 我们使用原生的websocket去实现双向通信, 在实际开发中应用不大, 可以说几乎用不到。但是对我们掌握原理, 提升对websocket的认知有很大帮助。</p>
+</blockquote>
+<p>websocket是前台的东西, 是HTML5的一种东西。socket技术早已有之, 只不过在HTML5才引入到web中。</p>
+<p><a href="https://github.com/imhxc/node-webSocket" target="_blank" rel="noopener">本文示例GitHub地址</a></p>
+<h2 id="开始实现"><a href="#开始实现" class="headerlink" title="开始实现"></a>开始实现</h2><p>原来的, 我们搭建一个服务器, 需要引入<code>http</code>模块, 并且创建、监听<code>server</code>, 如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>);</span><br><span class="line"><span class="keyword">const</span> server = http.createServer(<span class="function">(<span class="params">request,response</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'连接了'</span>);</span><br><span class="line">&#125;)</span><br><span class="line">server.listen(<span class="number">8888</span>);</span><br></pre></td></tr></table></figure>
+<p>但是我们现在不能在使用<code>http</code>模块了, 需要使用<code>net</code>模块。</p>
+<h2 id="为什么要使用net模块"><a href="#为什么要使用net模块" class="headerlink" title="为什么要使用net模块"></a>为什么要使用net模块</h2><p>我们需要知道的是, <code>websocket</code>是一种新的协议, 虽然说基于<code>http</code>协议, 只不过是为了兼容目前的浏览器协议环境, 因为目前浏览器的请求都是基于http协议的。所以当我们使用<code>http</code>模块的时候, 服务器不认<code>websocket</code>的协议, 这时候就需要我们使用相对更原生的<code>net</code>模块了。</p>
+<p>当我准备发送一个<code>websocket</code>请求的时候, 大概的流程如下: </p>
+<p>1.发送一个http请求, 但是请求头中包含了更换协议的头;<br>2.服务器处理请求, 发现需要更换到websocket协议, 则将请求交给socket,  返回给浏览器, 并且在返回头中告诉浏览器, 协议切换成功;<br>3.浏览器收到返回结果后, 将跟切换后的协议进行继续通信, 互相传递数据。</p>
+<p>在这里, http协议相当于一个牵线搭桥的作用, 之所以要基于http, 就是这个原因。</p>
+<p>如下示意图: 一个请求大致包含如下数据段</p>
+<hr>
+<h2 id="websocket数据-升级标记-http数据"><a href="#websocket数据-升级标记-http数据" class="headerlink" title="  websocket数据    | 升级标记 | http数据 |"></a>  websocket数据    | 升级标记 | http数据 |</h2><h2 id="使用net模块搭建服务器"><a href="#使用net模块搭建服务器" class="headerlink" title="使用net模块搭建服务器"></a>使用net模块搭建服务器</h2><p><a href="http://nodejs.cn/api/net.html" target="_blank" rel="noopener">点击查看net模块文档</a><br><a href="http://www.runoob.com/html/html5-websocket.html" target="_blank" rel="noopener">点击查看websocket文档</a></p>
+<p>直接看代码:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">前台js代码</span><br><span class="line"><span class="keyword">var</span> Socket = <span class="keyword">new</span> WebSocket(<span class="string">'ws://localhost:8080'</span>);</span><br><span class="line">Socket.onopen = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'连接上了'</span>);</span><br><span class="line">&#125;</span><br><span class="line">Socket.onmessage = <span class="function"><span class="keyword">function</span>(<span class="params">data</span>)</span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'接受到一个数据: '</span>, data)；</span><br><span class="line">&#125;</span><br><span class="line">Socket.onclose = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'连接关闭了'</span>);</span><br><span class="line">&#125;</span><br><span class="line">Socket.onerror = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'发生了错误'</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// node代码</span></span><br><span class="line"><span class="keyword">const</span> net = <span class="built_in">require</span>(<span class="string">'net'</span>);</span><br><span class="line"><span class="keyword">const</span> server = net.createServer(<span class="function"><span class="params">socket</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'链接了'</span>);</span><br><span class="line">    socket.once(<span class="string">'datda'</span>, data =&gt; &#123;</span><br><span class="line">        <span class="comment">// 接收传进来的数据</span></span><br><span class="line">        <span class="comment">// 这里其实是header头信息, 所以直接toString, 方便后面分析</span></span><br><span class="line">        <span class="built_in">console</span>.log(data.toString());</span><br><span class="line">    &#125;)</span><br><span class="line">    socket.on(<span class="string">'end'</span>, ()=&gt; &#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'连接结束了'</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;);</span><br><span class="line">server.listen(<span class="number">8080</span>);</span><br></pre></td></tr></table></figure>
+<p>上面的html代码其实不难理解, 都是一些官方文档理介绍的事件。我们主要来看服务器这边接收的代码:</p>
+<p>在上面的注释代码里我明确提到, <code>socket.on(&#39;data&#39;, data=&gt;{...})</code>这段代码, 在回调函数中, 接收到的就是header头信息, 由于是Buffer数据, 所以这里我们进行toString后信息如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">GET / HTTP/1.1</span><br><span class="line">Host: localhost:8080</span><br><span class="line">Connection: Upgrade</span><br><span class="line">Pragma: no-cache</span><br><span class="line">Cache-Control: no-cache</span><br><span class="line">Upgrade: websocket</span><br><span class="line">Origin: file://</span><br><span class="line">Sec-WebSocket-Version: 13</span><br><span class="line">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36</span><br><span class="line">Accept-Encoding: gzip, deflate, br</span><br><span class="line">Accept-Language: zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7</span><br><span class="line">Cookie: _ga=GA1.1.681310946.1517476323; _gid=GA1.1.1209840587.1517638478; io=EfBS1MrBMZnAUBs1AAAX</span><br><span class="line">Sec-WebSocket-Key: FWBQqpW0xklbNg7wFBBdUA==</span><br><span class="line">Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits</span><br><span class="line">//注意这里是换行符</span><br><span class="line">//注意这里是换行符</span><br></pre></td></tr></table></figure>
+<p>在这里我们直接找到涉及websocket的有用头信息:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Upgrade: websocket</span><br><span class="line">Sec-WebSocket-Version: 13</span><br><span class="line">Sec-WebSocket-Key: FWBQqpW0xklbNg7wFBBdUA==</span><br><span class="line">Sec-WebSocket-Extensions: permessage-deflate; client_max_window_bits</span><br></pre></td></tr></table></figure>
+<p>上面四个头信息中, 最后一个<code>Sec-WebSocket-Extensions</code>其实对于我们没有什么用, 他是用来对对WebSocket协议进行扩展的, 这里我们不涉及到。所以主要介绍头三个:</p>
+<p>Upgrade: 告诉服务器我要切换到websocket协议<br>Sec-WebSocket-Version: websocket版本号。(需要注意到, 目前websocket版本只有13版本)<br>Sec-WebSocket-Key: 相当于一个口令, 与服务器的一个暗号, 验证服务器是否与我的协议匹配, 是否识别websocket。(注意, 这里不算是加密)</p>
+<blockquote>
+<p>之前我有一篇文章对nodejs原生处理文件上传中有对header头进行介绍, 如何处理头信息, 为什么这么处理, 可以查阅这篇文章: <a href="https://imhxc.github.io/2018/02/01/node%E6%96%87%E4%BB%B6%E6%95%B0%E6%8D%AE%E4%B8%8A%E4%BC%A0%E5%8E%9F%E7%90%86/" target="_blank" rel="noopener">node文件数据上传原理</a></p>
+</blockquote>
+<p>处理这段头信息很简单, 利用字符串的分割即可:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> str = <span class="string">'头信息'</span>; <span class="comment">// 指代前面的头信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// strArr 数组见文章底部</span></span><br><span class="line"><span class="keyword">var</span> strArr = str.split(<span class="string">'\r\n'</span>); <span class="comment">// 简单提一下, 每个头后都有一个换行符</span></span><br><span class="line"><span class="comment">// 舍弃第一个元素 和后两个元素 。第一个元素无用，后两个元素因为两个换行符产生</span></span><br><span class="line">strArr = strArr.slice(<span class="number">1</span>,<span class="number">-2</span>);</span><br><span class="line"><span class="keyword">let</span> headerObj = &#123;&#125;</span><br><span class="line">strArr.forEach(<span class="function"><span class="params">ele</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="comment">// 然后循环 , 每个元素用的冒号空格切开(: ) </span></span><br><span class="line">    <span class="keyword">let</span> [key, val] = ele.split(<span class="string">': '</span>);</span><br><span class="line">    headerObj[key.toLowerCase()] = val;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="built_in">console</span>.log(headerObj); <span class="comment">// 此时我们就对头信息的字符串处理完毕。</span></span><br></pre></td></tr></table></figure>
+<h2 id="Sec-WebSocket-Key-sha1处理"><a href="#Sec-WebSocket-Key-sha1处理" class="headerlink" title="Sec-WebSocket-Key sha1处理"></a>Sec-WebSocket-Key sha1处理</h2><p>我们此时就需要对浏览器传过来的<code>Sec-WebSocket-Key</code>的值进行<code>sha1</code>散列算法处理:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> wsKey = headerObj[<span class="string">'sec-websocket-key'</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 借助node中的crypto模块进行处理</span></span><br><span class="line"><span class="keyword">let</span> hash = cyrpto.createHash(<span class="string">'sha1'</span>);</span><br><span class="line">hash.update(wsKey + <span class="string">'258EAFA5-E914-47DA-95CA-C5AB0DC85B11'</span>);</span><br><span class="line"><span class="keyword">let</span> key2 = hash.digest(<span class="string">'base64'</span>);</span><br><span class="line"><span class="built_in">console</span>.log(key2);</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>或许你会疑问:  <code>258EAFA5-E914-47DA-95CA-C5AB0DC85B11</code>这个字符串从和未来?<br>其实, 该字符串是由websocket文档提供的, 是个规范, 作者定义了我们就需要 将 浏览器传递过来的key 与 该固定的字符串进行拼接 然后进行sha1散列算法处理, 再转换成base64返回给浏览器。</p>
+</blockquote>
+<h2 id="返回头信息"><a href="#返回头信息" class="headerlink" title="返回头信息"></a>返回头信息</h2><p>处理完毕后, 发送对应头信息给浏览器, 如下:</p>
+<ul>
+<li>http code: 101</li>
+<li>Upgrade: websocket</li>
+<li>Connection: Upgrade</li>
+<li>Sec-WebSocket-Accept: key2(前面处理的key2字符串)</li>
+</ul>
+<p>代码如下:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socket.write(<span class="string">`HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: <span class="subst">$&#123;key2&#125;</span>\r\n\r\n`</span>);</span><br></pre></td></tr></table></figure>
+<p>此时, 🤝握手结束了。</p>
+<h2 id="开始处理真正的数据"><a href="#开始处理真正的数据" class="headerlink" title="开始处理真正的数据"></a>开始处理真正的数据</h2><p>前台如果发送数据, 可以使用websocket提供的send方法:</p>
+<p><code>websocket.send(&#39;msg&#39;)</code></p>
+<blockquote>
+<p>这里对于服务端的处理不再继续, 由于websocket发送的数据是一个<strong>数据帧结构</strong>, 所以我们如果需要获取数据, 就需要去深入的解析该结构, 并且涉及到解密数据的操作。所以我们不在继续深入, 因其复杂程度难以想象。<br>大家可以去网上深入了解。</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>对于日常工作和开发中, 我们几乎不会用到原生的websocket开发, 但是我们需要掌握其基本原理, 对于我们学习理解其他框架是很有帮助的, 同时对于我们的知识体系的构建也有很大的提升。</p>
+<p>websocket的原生实现步骤大致如下:</p>
+<p>1.抛弃http模块, 使用较原生的net模块来处理请求<br>2.处理握手流程</p>
+<ul>
+<li>WebSockiet-Version = 13 </li>
+<li>处理 Sec-WebSocket-Key, 将该key与另一个固定字符串拼接, 然后进行sha1散列算法处理, 接着处理成base64 返回给浏览器</li>
+<li>返回给浏览器的状态吗为101<ol>
+<li>数据帧的解析</li>
+</ol>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/WebScoket/" rel="tag"># WebScoket</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/04/JS作用域中的LHS和RHS查询/" rel="next" title="JS作用域中的LHS和RHS查询">
+                <i class="fa fa-chevron-left"></i> JS作用域中的LHS和RHS查询
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">侯先诚</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/imhxc" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="505421473@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#开始实现"><span class="nav-number">1.</span> <span class="nav-text">开始实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么要使用net模块"><span class="nav-number">2.</span> <span class="nav-text">为什么要使用net模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#websocket数据-升级标记-http数据"><span class="nav-number">3.</span> <span class="nav-text">  websocket数据    | 升级标记 | http数据 |</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用net模块搭建服务器"><span class="nav-number">4.</span> <span class="nav-text">使用net模块搭建服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sec-WebSocket-Key-sha1处理"><span class="nav-number">5.</span> <span class="nav-text">Sec-WebSocket-Key sha1处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#返回头信息"><span class="nav-number">6.</span> <span class="nav-text">返回头信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始处理真正的数据"><span class="nav-number">7.</span> <span class="nav-text">开始处理真正的数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">8.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">侯先诚</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cyt5AM5Tz';
+      var conf = 'c5cbf941130ee875a4ec7004192c72df';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
