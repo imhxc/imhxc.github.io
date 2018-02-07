@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JavaScript," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="发布-订阅模式又叫观察者模式, 它定义对象间的一种一对多的依赖关系, 当一个对象的状态发生改变的时候, 所有依赖于它的对象都将得到通知。在JavaScript中, 我们一般用时间模型来替代传统的发布-订阅模式。">
+<meta name="keywords" content="JavaScript">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js设计模式：发布-订阅模式">
+<meta property="og:url" content="http://yoursite.com/2018/02/07/发布-订阅模式/index.html">
+<meta property="og:site_name" content="侯先诚">
+<meta property="og:description" content="发布-订阅模式又叫观察者模式, 它定义对象间的一种一对多的依赖关系, 当一个对象的状态发生改变的时候, 所有依赖于它的对象都将得到通知。在JavaScript中, 我们一般用时间模型来替代传统的发布-订阅模式。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-07T17:28:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="js设计模式：发布-订阅模式">
+<meta name="twitter:description" content="发布-订阅模式又叫观察者模式, 它定义对象间的一种一对多的依赖关系, 当一个对象的状态发生改变的时候, 所有依赖于它的对象都将得到通知。在JavaScript中, 我们一般用时间模型来替代传统的发布-订阅模式。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/07/发布-订阅模式/"/>
+
+
+
+
+
+  <title>js设计模式：发布-订阅模式 | 侯先诚</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">侯先诚</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">侯先诚的个人博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/07/发布-订阅模式/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="侯先诚">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="侯先诚">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">js设计模式：发布-订阅模式</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-07T14:35:38+08:00">
+                2018-02-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2018/02/07/发布-订阅模式/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/02/07/发布-订阅模式/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  发布-订阅模式又叫观察者模式, 它定义对象间的一种一对多的依赖关系, 当一个对象的状态发生改变的时候, 所有依赖于它的对象都将得到通知。在JavaScript中, 我们一般用时间模型来替代传统的发布-订阅模式。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>发布-订阅模式, 又称观察者模式。它定义对象间的一种一对多的依赖关系, 当一个对象的状态发生改变的时候, 所有依赖(订阅)它的对象都将得到通知。在某种概念的理解上, 我们在开发中经常使用的DOM事件其实也是一种”发布-订阅模式”。</p>
+</blockquote>
+<p><a href="https://github.com/imhxc/js-observer-demo" target="_blank" rel="noopener">本文对应的代码地址</a></p>
+<h2 id="生活中的”发布-订阅模式”"><a href="#生活中的”发布-订阅模式”" class="headerlink" title="生活中的”发布-订阅模式”"></a>生活中的”发布-订阅模式”</h2><blockquote>
+<p>为了方便我们理解, 我们从生活中的一个例子来入手。</p>
+</blockquote>
+<p>小明目前需要买一套房子, 于是他去了一趟售楼部, 结果被告知楼盘售空。但是售楼部告诉小明, 不久后会有新楼盘出售, 但是具体什么时候不知道, 为了使小明及时的买到下一次的楼盘。于是, 就出现下面这一情况:</p>
+<blockquote>
+<p>小明将手机号留给售楼部, 售楼部告诉小明, 当新楼盘开售的时候, 将会第一时间通过手机告诉小明。同样的, 其他人也将手机号留在了售楼部的手机花名册里, 当下一次楼盘开售的时候, 售楼部会遍历花名册, 一次发送手机短信来告知客户。</p>
+</blockquote>
+<p>在上面的例子中, 售楼部就是发布者(发布楼盘开售消息), 而小明和其他客户就是订阅者(订阅新楼盘开售的消息)。如果不这么做, 小明和其他客户就需要频繁的来到售楼部去询问: 新楼盘什么时候开售? 新楼盘什么时候开售? 新楼盘什么时候开售? 很明显, 这样频繁的来询问对于售楼部和客户来说, 都是不利的。</p>
+<p>所以这一模式(发布-订阅)有以下显而易见的优点:</p>
+<ul>
+<li>作为订阅者(客户)只需要完成订阅操作(将手机号留给售楼部)即可, 其他的不需要我们去关心, 比如售楼部办公地点搬到了马路对面、售楼前台换人了。</li>
+<li>作为发布者(售楼部)只需要关心订阅者列表(手机花名册), 订阅者的其他事情不需要我们去关心。</li>
+<li>解除了耦合状态(不是完全解除了耦合)。</li>
+</ul>
+<h2 id="开发中的-“发布-订阅”模式"><a href="#开发中的-“发布-订阅”模式" class="headerlink" title="开发中的 “发布-订阅”模式"></a>开发中的 “发布-订阅”模式</h2><blockquote>
+<p>在日常开发中, 由于对”发布-订阅”模式不了解, 所以对于日常开发中使用到了该模式的地方, 我们可能并不知晓。其实, 我们几乎每个人都使用过该模式。</p>
+</blockquote>
+<h3 id="DOM事件"><a href="#DOM事件" class="headerlink" title="DOM事件"></a>DOM事件</h3><p>对于DOM事件的绑定, 几乎没有人没使用过, 其实这就是一种”发布-订阅模式”, 如下代码:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">document</span>.body.addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'hi'</span>);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line"><span class="built_in">document</span>.body.click(); <span class="comment">// 模拟用户点击</span></span><br></pre></td></tr></table></figure>
+<p>在这里, 我们给<code>body</code>元素添加了一个<code>click</code>事件, 相当于订阅事件, 订阅了<code>click</code>事件。而用户就是发布者, 当用户点击的时候就相当于发布了一个<code>click</code>事件, 通知其回调函数打印单词<code>hi</code>。</p>
+<p>事实上, 我们不知道用户什么时候点击, 于是我们监听了<code>click</code>事件(订阅), 等待用户点击(发布);这一过程和前面购房过程是一样的: 客户不知道什么新楼盘什么时候开售, 于是留下了手机号, 等待售楼部的短信通知。</p>
+<h3 id="回调函数"><a href="#回调函数" class="headerlink" title="回调函数"></a>回调函数</h3><p>从某种程度上说, 回调函数也可以理解为”发布-订阅”模式。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">    url: <span class="string">'xxx'</span>,</span><br><span class="line">    success(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="built_in">console</span>.log(<span class="string">'success'</span>);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="string">`</span></span><br></pre></td></tr></table></figure>
+<p>上面代码中, 我们通过<code>success</code>函数来监听成功返回的数据, 我们只需要等待就可以了, 不需要关注其请求过程中发生了什么, 只要当请求结果发布成功消息, 作为订阅者<code>success</code>函数就会接收, 然后执行。这一过程和”发布-订阅”模式何其相似。</p>
+<h2 id="自定义事件"><a href="#自定义事件" class="headerlink" title="自定义事件"></a>自定义事件</h2><blockquote>
+<p>理解了”发布-订阅”模式, 我们来看看写一个基本的”发布-订阅”模式, 从而一步一步应用到我们实际开中。</p>
+</blockquote>
+<p>首先我们需要捋清一下思路:</p>
+<ul>
+<li>定义一个发布者(售楼部)</li>
+<li>发布者需要有一个订阅者的存放列表(售楼部的花名册)</li>
+<li>发布者需要有一个收集订阅者的方法(售楼部将客户记录到花名册的过程)</li>
+<li>发布者需要有一个消息发布的方法(售楼部遍历花名册发送短信)</li>
+</ul>
+<p>好了, 我们一步一步来。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 1. 定义一个发布者</span></span><br><span class="line"><span class="keyword">let</span> promulgator = &#123;&#125;; </span><br><span class="line"><span class="comment">// 2. 给发布者定义一个订阅者存放列表</span></span><br><span class="line">promulgator.clientList = [];</span><br><span class="line"><span class="comment">// 3. 给发布者定义一个添加订阅者的方法</span></span><br><span class="line">promulgator.addListen = <span class="function"><span class="keyword">function</span>(<span class="params">fn</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.clientList.push(fn); <span class="comment">// 将订阅者的消息函数添加到数组中</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 4. 给发布者定义一个消息发布的方法</span></span><br><span class="line">promulgator.trigger = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.clientList.forEach(<span class="function"><span class="params">ele</span> =&gt;</span> &#123;</span><br><span class="line">        ele.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>); </span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>售楼处(发布者)定义好之后, 我们需要模拟一些客户(订阅者), 方便当有楼盘开售的时候(发布消息), 客户可以接收到。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 定义一个小明客户</span></span><br><span class="line">promulgator.listen(<span class="function"><span class="keyword">function</span>(<span class="params">price, squareMater</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> obj = &#123;</span><br><span class="line">        name: <span class="string">'小明'</span>,</span><br><span class="line">        price: price,</span><br><span class="line">        squareMater: squareMater</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="built_in">console</span>.log(obj);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 定义一个小红客户</span></span><br><span class="line">promulgator.listen(<span class="function"><span class="keyword">function</span>(<span class="params">price, squareMater</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> obj = &#123;</span><br><span class="line">        name: <span class="string">'小明'</span>,</span><br><span class="line">        price: price,</span><br><span class="line">        squareMater: squareMater</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="built_in">console</span>.log(obj);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>上面的代码中, 有小明和小红两个客户订阅了新楼盘的开售的消息。</p>
+<p>有一天, 新楼盘开售了, 售楼处给花名册上的客户发送了楼盘开售的短信:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">promulgator.trigger(<span class="number">3000</span>, <span class="number">88</span>); </span><br><span class="line"><span class="comment">// promulgator.trigger(4000, 100); // 如果有一天又有新的楼盘发售, 我们可以再次执行一次，以告诉订阅者</span></span><br></pre></td></tr></table></figure>
+<p>此时, 应该打印出如下代码:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    name: <span class="string">'小明'</span>,</span><br><span class="line">    price: <span class="number">3000</span>,</span><br><span class="line">    squareMater: <span class="number">88</span></span><br><span class="line">&#125;;</span><br><span class="line">&#123;</span><br><span class="line">    name: <span class="string">'小红'</span>,</span><br><span class="line">    price: <span class="number">3000</span>,</span><br><span class="line">    squareMater: <span class="number">88</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>也就是所, 花名册上的所有用户都收到了售楼处的消息: 价格3w/平, 面积88平的楼盘。</p>
+<blockquote>
+<p>至此, 我们完成了一个基本的”发布-订阅”模式的事件。但这里有一个问题, 上面的方法中, 不管客户关心的是88平米的还有100平米的, 每次都会发给所有用户; 也就是说, 如果小明关心的是100平米的, 上面的88平米的楼盘消息显然不应该发给小明。所以, 为了解决这一问题, 我们可以添加一个标志key。</p>
+</blockquote>
+<p><a href="https://github.com/imhxc/js-observer-demo/blob/master/%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8B%E4%BB%B6/2.html" target="_blank" rel="noopener">点击查看示例代码</a></p>
+<p>“通过标志key来解决”其实很好理解, 只不过是将关心某一个类型的客户归纳成一个数组, 最后push到<code>clientList</code>, 形成一个二维数组。当售楼部有88平的楼盘开售的消息时候, 只需要遍历<code>clientList</code>数组中key为<code>squareMater88</code>下的订阅者即可。</p>
+<h2 id="通用实现"><a href="#通用实现" class="headerlink" title="通用实现"></a>通用实现</h2><blockquote>
+<p>我们还需要考虑一个场景: 小明光顾的售楼部属于A区, 在另一个地方B区也有一个售楼部, 同样有新楼盘待开售, 小明对该地方的楼盘也很感兴趣, 并且都属于同一开发商。那么, 如果B区售楼部怎么得到小明的手机号? 难不成需要小明在去B区售楼部跑一趟? 明显这中用户体验不好。那么我们就要让B区售楼部共享A区售楼部的花名册。</p>
+</blockquote>
+<p>我们首先需要将发布-订阅功能提取出来: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> event = &#123;</span><br><span class="line">    clientList = [];</span><br><span class="line">    listen: <span class="function"><span class="keyword">function</span>(<span class="params">key, fn</span>)</span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (!<span class="keyword">this</span>.clientList[key]) &#123;</span><br><span class="line">            <span class="keyword">this</span>.clientList[key] = [];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.clientList[key].push(fn); <span class="comment">// 将订阅者添加到列表中</span></span><br><span class="line">    &#125;;</span><br><span class="line">    trigger: <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; <span class="comment">// 定义消息发布方法</span></span><br><span class="line">        <span class="keyword">let</span> key = <span class="built_in">Array</span>.prototype.shift.call(<span class="built_in">arguments</span>);</span><br><span class="line">        <span class="keyword">let</span> fns = <span class="keyword">this</span>.clientList[key];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (!fns || fns.length === <span class="number">0</span>) <span class="keyword">return</span> <span class="literal">false</span>; <span class="comment">// 不存在订阅者 直接取消发布操作</span></span><br><span class="line">        fns.forEach(<span class="function"><span class="params">ele</span> =&gt;</span> &#123;</span><br><span class="line">            ele.apply(<span class="keyword">this</span>, <span class="built_in">arguments</span>);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过上面的定义, 我们就将订阅-发布功能提取了出来, 也就是说, 现在售楼部的花名册、花名册收集方法和消息发布的方法都放到了一个公共的区域中, 方便A和B两个售楼部共享。</p>
+<p>此时, 我们还需要定义一个安装事件的方法, 让AB都可以实际的去操作。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> installEvent = <span class="function"><span class="keyword">function</span>(<span class="params">obj</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">let</span> i <span class="keyword">in</span> event) &#123;</span><br><span class="line">        obj[i] = event[i];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>给A和B售楼部添加订阅发布功能。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> promulgatorA = &#123;&#125;</span><br><span class="line"><span class="keyword">let</span> promulgatorB = &#123;&#125;</span><br><span class="line">installEvent(promulgatorA);</span><br><span class="line">installEvent(promulgatorB);</span><br></pre></td></tr></table></figure>
+<p>假设此时有小明、小红两个订阅者, A和B区都有了新楼盘发售:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">promulgatorA.trigger(<span class="string">'squareMater88'</span>, <span class="number">20000</span>);</span><br><span class="line">promulgatorB.trigger(<span class="string">'squareMater88'</span>, <span class="number">23000</span>);</span><br></pre></td></tr></table></figure>
+<p>这样, 小红和小明都可以接受到A和B售楼部的消息。</p>
+<p><a href="https://github.com/imhxc/js-observer-demo/blob/master/%E9%80%9A%E7%94%A8%E5%AE%9E%E7%8E%B0/1.html" target="_blank" rel="noopener">点击查看完整代码</a></p>
+<h2 id="取消订阅事件"><a href="#取消订阅事件" class="headerlink" title="取消订阅事件"></a>取消订阅事件</h2><blockquote>
+<p>如果有一天, 小明不想买房子了, 所以售楼部就需要从花名册中删去小明, 防止下次有新楼盘的时候发送给一个不需要的人。</p>
+</blockquote>
+<p>实现这一功能其实很简答, 只需要我们给<code>event</code>对象添加一个<code>remove</code>方法, 通过遍历的方法, 来找到小明的消息回调函数,  通过<code>splice</code>方法来删除数组元素。</p>
+<p><a href="https://github.com/imhxc/js-observer-demo/blob/master/%E5%8F%96%E6%B6%88%E8%AE%A2%E9%98%85%E4%BA%8B%E4%BB%B6/1.html" target="_blank" rel="noopener">点击查看完整代码</a></p>
+<h2 id="解除耦合"><a href="#解除耦合" class="headerlink" title="解除耦合"></a>解除耦合</h2><blockquote>
+<p>其实前面的例子中, 小明和购房者之间还存在一定的耦合性以及两个售楼处之间存在资源浪费的情况。</p>
+</blockquote>
+<ul>
+<li>A和B售楼部都有的<code>listen</code>、<code>remove</code>、<code>trigger</code>方法以及<code>clientList</code>数组。</li>
+<li>小明需要知道售楼部的对象是什么名字(A还是B, 对应事件promulgatorA还是promulgatorB), 这就造成了一种耦合性。</li>
+</ul>
+<p>我们可以将新楼盘消息交给中介, 而我们只需要与中介交流即可。在代码中, 我们用一个全局对象充当中介者, 订阅者不需要关心这个楼盘消息是来自A还是B, 售楼部(发布者)也不需要关心我发给小明还是小红, 这一切只需要通过中介 就可以。</p>
+<p><a href="https://github.com/imhxc/js-observer-demo/blob/master/%E5%85%A8%E5%B1%80%E5%8F%91%E5%B8%83-%E8%AE%A2%E9%98%85%E5%AF%B9%E8%B1%A1(%E4%B8%AD%E4%BB%8B" target="_blank" rel="noopener">点击查看完整代码</a>/1.html)</p>
+<h2 id="模块之间通信"><a href="#模块之间通信" class="headerlink" title="模块之间通信"></a>模块之间通信</h2><blockquote>
+<p>在一些Vue、React等框架中, 我们经常需要做到一些数据的监听、模块之间的通信。通过发布-订阅模式, 我们可以简单的模拟模块之间的通信。</p>
+</blockquote>
+<p><a href="https://github.com/imhxc/js-observer-demo/blob/master/%E6%A8%A1%E5%9D%97%E9%97%B4%E9%80%9A%E4%BF%A1/1.html" target="_blank" rel="noopener">点击查看完整代码</a></p>
+<h2 id="实际运用"><a href="#实际运用" class="headerlink" title="实际运用"></a>实际运用</h2><blockquote>
+<p>任何模式, 都是为了解决实际需求的。如果对实际开发需求没有任何帮助,  那么这种设计模式只是花瓶。在日常开发中, 我们经常会遇到登陆的功能需求: 当登陆成功后, 一些模块需要获取登陆信息, 比如导航栏中的用户头像、购物车中用户添加的物品数量等等。这些, 都可以借助订阅-发布模式来完成。</p>
+</blockquote>
+<p>假如我们只负责登陆模块的开发, 一般的, 我们会首先想到下面的方式:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">login.success(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 登陆成功, 告诉需要接收登陆成功信息的模块</span></span><br><span class="line">    header();  <span class="comment">// 告诉header模块我登陆成功了</span></span><br><span class="line">    shopCart(); <span class="comment">// 告诉shopCart模块我登陆成功了</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>上面代码中, 我们在登陆成功后, 通过调用相关模块的方法来完成登陆成功消息发布的操作。</p>
+<p>但是, 当有一天, 负责新闻列表模块的兄弟也要获取登陆成功的消息, 于是我们将新闻列表模块添加到登陆成功回调函数里:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">login.success(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 登陆成功, 告诉需要接收登陆成功信息的模块</span></span><br><span class="line">    header();  <span class="comment">// 告诉header模块我登陆成功了</span></span><br><span class="line">    shopCart(); <span class="comment">// 告诉shopCart模块我登陆成功了</span></span><br><span class="line">    news(); <span class="comment">// 告诉news模块我登陆成功了</span></span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p>又有一天, 负责导航菜单的兄弟也需要获取登陆成功的消息，用来显示相应的菜单, 并且让你去添加一下, 可惜, 你此时由于外出度假或者其他原因, 无法去添加。</p>
+<p>对于上面这一问题, 如果后面有更多的模块需要订阅登陆成功的消息, 那么负责登陆模块的我们每次都需要去添加, 重复一些简单繁琐的任务。</p>
+<p>这个时候，我们可以借助订阅-发布模式, 来暴露一个借口, 让所有需要订阅该消息的模块去主动的订阅, 不在需要负责登陆模块的我们去添加订阅者了。而且作为负责登陆模块的我们不需要去关心其他模块做了什么, 其他模块也只需要关心我暴露了什么借口就行。当我登陆的模块发出消息后, 这些订阅者都会接收到相应的消息。</p>
+<p><a href="https://imhxc.github.io/js-observer-demo/%E4%BE%8B%E5%AD%90-%E7%99%BB%E9%99%86%E5%8A%9F%E8%83%BD/1.html" target="_blank" rel="noopener">在线体验demo</a><br><a href="https://github.com/imhxc/js-observer-demo/tree/master/%E4%BE%8B%E5%AD%90-%E7%99%BB%E9%99%86%E5%8A%9F%E8%83%BD" target="_blank" rel="noopener">点击查看完整代码</a></p>
+<blockquote>
+<p>上面的demo中, 模拟了登陆成功后, 订阅了该消息的订阅者都会接收到消息, 发生对应的改变。同时也模拟了负责其他模块的开发者, 也可以主动的去订阅。整个过程不在需要负责登陆模块的我们了。</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><blockquote>
+<p>大家可以去观察JS设计模式一书, 上面有更加权威详细的介绍。<br>对于发布-订阅模式, 我们也不应宜过度使用, 否则会造成代码逻辑的难以理解。在现如今流行的Vue、React等MVC或者MVVM框架中, 都少不了该模式的参与, 对于我们学习理解框架有很好的帮助。另外, 在JavaScirpt中, 还有另外一个概念: 推模型和拉模型。推模型是指在事件发生的时候, 发布者一次性将所有的数据推送给订阅者; 拉模型是指发布者仅仅通知一个完成状态, 不发送实际数据, 需要订阅者主动的来拉去数据。实际场景可以想象微信开发中的用户资料获取API。</p>
+<p>另外, 还有一个场景, 比如是否必须要先订阅在发布？。文章中的例子都需要们先订阅, 才能接收到发布的消息。而对于未订阅之前的发布消息我们则无法获取。实际上我们开发中有时候需要获取订阅之前发布的消息, 比如QQ离线消息。在离线的时候我们并未订阅, 但是QQ将消息保留至服务器中, 当我们登陆后(开始订阅), 服务器便会将登陆之前(订阅之前)的消息推送给我们。<br>解决这一问题, 实际上只需要模拟QQ的处理即可,比如存储到一个事件堆栈里, 当事件发布的时候,  如果没有订阅者来订阅, 我就存放起来, 等到有订阅者订阅的时候, 通过遍历来将历史消息发送给订阅者。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/05/webSocket原生搭建/" rel="next" title="webSocket原生搭建">
+                <i class="fa fa-chevron-left"></i> webSocket原生搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">侯先诚</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">15</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/imhxc" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="505421473@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#生活中的”发布-订阅模式”"><span class="nav-number">1.</span> <span class="nav-text">生活中的”发布-订阅模式”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开发中的-“发布-订阅”模式"><span class="nav-number">2.</span> <span class="nav-text">开发中的 “发布-订阅”模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DOM事件"><span class="nav-number">2.1.</span> <span class="nav-text">DOM事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#回调函数"><span class="nav-number">2.2.</span> <span class="nav-text">回调函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自定义事件"><span class="nav-number">3.</span> <span class="nav-text">自定义事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#通用实现"><span class="nav-number">4.</span> <span class="nav-text">通用实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#取消订阅事件"><span class="nav-number">5.</span> <span class="nav-text">取消订阅事件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解除耦合"><span class="nav-number">6.</span> <span class="nav-text">解除耦合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模块之间通信"><span class="nav-number">7.</span> <span class="nav-text">模块之间通信</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实际运用"><span class="nav-number">8.</span> <span class="nav-text">实际运用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">9.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">侯先诚</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cyt5AM5Tz';
+      var conf = 'c5cbf941130ee875a4ec7004192c72df';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
