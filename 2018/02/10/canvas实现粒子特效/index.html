@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Canvas,CSS,HTML," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="网上有很多类似的实现, 今天尝试自己做了一个简单的粒子效果, 使用了一些基础的canvas API。">
+<meta name="keywords" content="Canvas,CSS,HTML">
+<meta property="og:type" content="article">
+<meta property="og:title" content="canvas实现粒子特效">
+<meta property="og:url" content="http://yoursite.com/2018/02/10/canvas实现粒子特效/index.html">
+<meta property="og:site_name" content="侯先诚">
+<meta property="og:description" content="网上有很多类似的实现, 今天尝试自己做了一个简单的粒子效果, 使用了一些基础的canvas API。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-10T17:27:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="canvas实现粒子特效">
+<meta name="twitter:description" content="网上有很多类似的实现, 今天尝试自己做了一个简单的粒子效果, 使用了一些基础的canvas API。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/02/10/canvas实现粒子特效/"/>
+
+
+
+
+
+  <title>canvas实现粒子特效 | 侯先诚</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">侯先诚</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">侯先诚的个人博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/10/canvas实现粒子特效/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="侯先诚">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="侯先诚">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">canvas实现粒子特效</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-10T18:54:43+08:00">
+                2018-02-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书/" itemprop="url" rel="index">
+                    <span itemprop="name">读书</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2018/02/10/canvas实现粒子特效/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/02/10/canvas实现粒子特效/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  网上有很多类似的实现, 今天尝试自己做了一个简单的粒子效果, 使用了一些基础的canvas API。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://github.com/imhxc/canvas/blob/master/%E7%B2%92%E5%AD%90.html" target="_blank" rel="noopener">源码地址</a><br><a href="https://imhxc.github.io/canvas/%E7%B2%92%E5%AD%90.html" target="_blank" rel="noopener">预览地址</a></p>
+<blockquote>
+<p>这篇学习笔记来源于《如何使用 Canvas 制作出炫酷的网页背景特效》这一小册, 大家感兴趣可以去购买阅读。</p>
+<p>在这篇文章中, 因为canvas和生活中的美术绘画实在是太像了， 并且由于我本身是学习艺术的, 所以回经常拿绘画来比喻, 方便理解。另外, 这篇文章中不会介绍基础API, 因为文档中有更权威的介绍。</p>
+</blockquote>
+<h2 id="创建画布"><a href="#创建画布" class="headerlink" title="创建画布"></a>创建画布</h2><blockquote>
+<p>任何canvas绘制开始之前, 都需要一个画布, 好比画画的时候没有画纸是不行的。 </p>
+</blockquote>
+<p>直接上代码: </p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">style</span>&gt;</span><span class="undefined"></span></span><br><span class="line"><span class="undefined">            html, body &#123;</span></span><br><span class="line"><span class="undefined">                margin: 0;</span></span><br><span class="line"><span class="undefined">                width: 100%;</span></span><br><span class="line"><span class="undefined">                height: 100%;</span></span><br><span class="line"><span class="undefined">                background: #000;</span></span><br><span class="line"><span class="undefined">            &#125;</span></span><br><span class="line"><span class="undefined">        </span><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">        <span class="comment">&lt;!-- 创建canvas标签 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">canvas</span> <span class="attr">id</span>=<span class="string">"canvas"</span>&gt;</span><span class="tag">&lt;/<span class="name">canvas</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>根据预览地址的效果, 我们写了一个简单的html结构。并设置body为了全屏, 背景颜色为黑色。</p>
+<blockquote>
+<p>到这里, 我们并没有对canvas进行任何操作, 默认的canvas尺寸为300 <em> 150(宽</em>高,px), 所以我们还要通过一些API来对canvas进行操作, 设置全屏。</p>
+</blockquote>
+<p>设置画布全屏很简单, 通过对canvas对象设置<code>width</code>和<code>height</code>属性为视窗尺寸即可。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// js代码</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> canvas = <span class="built_in">document</span>.getElementById(<span class="string">'canvas'</span>); <span class="comment">// 获取canvas标签对象</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> round = []; <span class="comment">// 存放粒子实例的数组, 后面会用到</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取视窗宽高</span></span><br><span class="line"><span class="keyword">const</span> CLIENT_HEIGHT = <span class="built_in">document</span>.documentElement.clientHeight();</span><br><span class="line"><span class="keyword">const</span> CLIENT_WIDTH = <span class="built_in">document</span>.documentElement.clientWidth();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置canvas宽高</span></span><br><span class="line">canvas.width = CLIENT_WIDTH;</span><br><span class="line">canvas.height = CLIENT_HEIGHT;</span><br></pre></td></tr></table></figure>
+<p>至此, 我们已经得到了一个全屏的画布、黑色背景的页面。</p>
+<blockquote>
+<p>其实, 对于canvas尺寸的设置有三种方式, 但是我们推荐通过HTML标签内属性设置和JS设置, 之所以不推荐通过CSS设置是因为这样会导致绘制的图形发生变形<br>。</p>
+</blockquote>
+<h2 id="绘制静态粒子"><a href="#绘制静态粒子" class="headerlink" title="绘制静态粒子"></a>绘制静态粒子</h2><blockquote>
+<p>在绘制粒子之前, 我们需要分析如何绘制一个随机遍布整个画布的粒子。</p>
+</blockquote>
+<p>我们需要达到的效果:</p>
+<ul>
+<li>透明度随机</li>
+<li>位置随机</li>
+<li>大小随机</li>
+</ul>
+<p>由于整个画布是存在很多很多粒子的, 我们不可能一个一个手动的去绘制, 所以我们需要设计一个方法, 或者说我们需要去设计一个粒子的类, 然后通过循环去实例化这个类, 这样就产生了多个粒子实例。<br>另外, 既然是创建多个粒子, 也就是要在画布上进行绘制, 所以我们还需要一个绘制的方法。<br>最后, 我们把创建、绘制的方法定制好后, 就要准备实现了, 就像发射火箭, 零件、燃料都准备好后, 就等发射了, 所以, 我们需要写一个类似的方法, 该方法包含了生成粒子的操作。</p>
+<p>所以, 我们需要分下面几步:</p>
+<ul>
+<li>创建一个粒子类</li>
+<li>给粒子添加绘制方法</li>
+<li>准备发谁🚀</li>
+</ul>
+<h3 id="创建一个粒子类"><a href="#创建一个粒子类" class="headerlink" title="创建一个粒子类"></a>创建一个粒子类</h3><blockquote>
+<p>由于整个画布是存在很多很多粒子的, 我们不可能一个一个手动的去绘制, 所以我们需要设计一个方法, 或者说我们需要去设计一个粒子的类, 然后通过循环去实例化这个类, 这样就产生了多个粒子实例。</p>
+</blockquote>
+<p>所以我们先写一个<code>RoundItem</code>类:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">RoundItem</span>(<span class="params">index, x, y</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.index = index; <span class="comment">// 可以区分不同的粒子， 该index唯一</span></span><br><span class="line">    <span class="keyword">this</span>.x = x;</span><br><span class="line">    <span class="keyword">this</span>.y = y;</span><br><span class="line">    <span class="keyword">this</span>.r = <span class="built_in">Math</span>.random() * <span class="number">2</span> + <span class="number">1</span>; <span class="comment">// 半径， 决定大小</span></span><br><span class="line">    <span class="keyword">let</span> alpha = (<span class="built_in">Math</span>.floor(<span class="built_in">Math</span>.random() * <span class="number">10</span>) + <span class="number">1</span>) / <span class="number">10</span> /<span class="number">2</span>; <span class="comment">// 透明度计算公式, 只是一种参考方式</span></span><br><span class="line">    <span class="keyword">this</span>.color = <span class="string">`rgba(255,255,255, <span class="subst">$&#123;alpha&#125;</span>)`</span>; <span class="comment">// 设置颜色</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>至此, 我们创建一个粒子的类。这里我们需要三个参数: <code>index</code>、<code>x</code>、<code>y</code>。分别是粒子的key(相当于循环索引, 唯一)、x坐标和y坐标。对于<code>index</code>参数,主要是为了区分通过循环创建的每个粒子实例, 后面的代码中会体现。</p>
+<h3 id="添加绘制方法"><a href="#添加绘制方法" class="headerlink" title="添加绘制方法"></a>添加绘制方法</h3><blockquote>
+<p>任何东西, 想在画布上展示出来, 都需要进行绘制, 就好比我们绘画需要拿起笔在纸上开始创作一样🎨。如果我们仅仅创建了一个类, 就盲目的去实例出许许多多的粒子, 但是实例出来的粒子由于没有绘制方法, 就无法在画布上展示。 好比我们已经在脑海中构造了一个画面饱满的构图, 但是却始终没有拿起笔来画到画质上。</p>
+</blockquote>
+<p>所以这里, 我们在<code>RoundItem</code>类上添加一个<code>draw</code>方法:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">RoundItem.prototype.draw = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    context.fillStyle = <span class="keyword">this</span>.color;</span><br><span class="line">    context.shadowBlur = <span class="keyword">this</span>.r * <span class="number">2</span>;</span><br><span class="line">    context.beginPath();</span><br><span class="line">    context.arc(<span class="keyword">this</span>.x, <span class="keyword">this</span>.y, <span class="keyword">this</span>.r, <span class="number">0</span>, <span class="number">2</span> * <span class="built_in">Math</span>.PI, <span class="literal">false</span>);</span><br><span class="line">    context.closePath();</span><br><span class="line">    context.fill();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这里, 其实可以进一步降低耦合性, 比如将方法里的<code>context</code>。但是为了代码易于阅读, 不至于太绕, 所以这里指定了具体的目标。</p>
+</blockquote>
+<h3 id="发射🚀"><a href="#发射🚀" class="headerlink" title="发射🚀"></a>发射🚀</h3><blockquote>
+<p>一切准备继续后， 我们就要开始将粒子展示在我们的画布上了。为了方便调用, 所以我们这里也封装到一个函数里。</p>
+</blockquote>
+<p>这里, 我们封装到一个<code>init</code>函数里:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">init</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// for循环创建实例</span></span><br><span class="line">    <span class="comment">// 这里设置了数量为80， 大家可以随意设置</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span> ; i &lt; <span class="number">80</span>; i++) &#123;</span><br><span class="line">        <span class="comment">// round前面已经定义</span></span><br><span class="line">        round[i] = <span class="keyword">new</span> RoundItem(i, <span class="built_in">Math</span>.random() * CLIENT_WIDTH, <span class="built_in">Math</span>.random() * CLIENT_HEIGHT);</span><br><span class="line">        round[i].draw(); <span class="comment">// 绘制</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>至此, 我们完成一个页面中随机分布粒子的页面, 但是, 这些还不够, 我们希望它可以动起来。</p>
+</blockquote>
+<h2 id="让粒子动起来"><a href="#让粒子动起来" class="headerlink" title="让粒子动起来"></a>让粒子动起来</h2><blockquote>
+<p>前面， 我们实现了粒子静态展示, 但是我们如果想要他像dmeo中动起来， 需要怎么做呢?</p>
+</blockquote>
+<h3 id="添加移动方法"><a href="#添加移动方法" class="headerlink" title="添加移动方法"></a>添加移动方法</h3><p>通过demo我们可以观察到, 粒子是不断上升的, 像冒泡泡一样。实现这样的效果, 其实很简单, 粒子的上升, 也就是说明Y轴的数值在移动, 而要做到源源不断的效果，只需要当顶部的粒子超出了屏幕顶部, 也就是Y轴成为负数的时候, 我们将粒子移动到最底部, 这样就达到了一个视觉差的效果, 让人以为是源源不断的。另外, 我们需要明白的是, 在canvas中， 动画都是一个<strong>擦出-&gt;重绘</strong>的过程。</p>
+<p>所以, 我们思路大概如下:</p>
+<ul>
+<li>通过循环来不断的改变每个粒子的y值, 达到上升的效果<ul>
+<li>先清除画布</li>
+<li>将产生的移动粒子10像素</li>
+<li>绘制到画布上</li>
+<li>(👆上面就是一个重绘的过程)</li>
+</ul>
+</li>
+</ul>
+<p>既然是移动, 我们就需要像前面的那样, 写一个移动的方法, 这里我们写一个<code>move</code>方法:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">RoundItem.prototype.move = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.y -= <span class="number">0.15</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">this</span>.y &lt;= <span class="number">-10</span>) &#123; <span class="comment">// 这里的-10仅仅是一个参考值, 负数说明超出了屏幕顶部</span></span><br><span class="line">        <span class="keyword">this</span>.y = CLIENT_HEIGHT + <span class="number">10</span>; <span class="comment">// 每次移动10px</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">this</span>.draw(); <span class="comment">// 绘制</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="开始循环发射🚀"><a href="#开始循环发射🚀" class="headerlink" title="开始循环发射🚀"></a>开始循环发射🚀</h3><blockquote>
+<p>移动方法添加完毕, 想了想, 一切准备就绪。就等调用了。</p>
+</blockquote>
+<p>熟悉flash的话会知道, 连续的帧就会产生动画, 所以我们只要设置一个合理的时间, 通过不断的擦除、重绘就可以达到一个动画的效果。这里, 我们不使用<code>setTimeout</code>或者<code>setInterval</code>, 而是使用<code>requestAnimationFrame</code>函数来实现动画, 后者性能会比较好, 更多详细的可以参考官方文档。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">animate</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    context.clearRect(<span class="number">0</span>,<span class="number">0</span>,CLIENT_WIDTH, CLIENT_HEIGHT); <span class="comment">// 清除画布</span></span><br><span class="line"></span><br><span class="line">    round.forEach(<span class="function"><span class="params">ele</span> =&gt;</span> &#123; <span class="comment">// 重新绘制</span></span><br><span class="line">        ele.move();</span><br><span class="line">    &#125;)</span><br><span class="line">    requestAnimationFrame(animate); <span class="comment">// 通过递归调用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后, 我们将<code>animate</code>方法添加到前面的<code>init</code>方法中:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">init</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">// for循环创建实例</span></span><br><span class="line">    <span class="comment">// 这里设置了数量为80， 大家可以随意设置</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span> ; i &lt; <span class="number">80</span>; i++) &#123;</span><br><span class="line">        <span class="comment">// round前面已经定义</span></span><br><span class="line">        round[i] = <span class="keyword">new</span> RoundItem(i, <span class="built_in">Math</span>.random() * CLIENT_WIDTH, <span class="built_in">Math</span>.random() * CLIENT_HEIGHT);</span><br><span class="line">        round[i].draw(); <span class="comment">// 绘制</span></span><br><span class="line">    &#125;</span><br><span class="line">    animate(); <span class="comment">// 开始循环发射🚀</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>对于动画循环的时间设置。一方面, 循环时间要足够短, 保正动画流畅。另一方面, 又要足够长, 这样此岸鞥保证浏览器有能力去渲染。</p>
+<p>大多数电脑显示器的刷新频率是60Hz, 大概相当于每秒重绘60次。多数浏览器会对重绘操作加以限制，不超过显示器的重绘频率, 因为超过了对于用户体验不会有任何提升, 只会损耗性能。因此, 最佳的频率是1000ms/60，约等于16.6ms。 </p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><blockquote>
+<p>整个粒子特效从静态绘制到动态绘制的过程其实很简单, 从整体看, 首先我们创建一个粒子类, 并且给给它添加了绘制、移动的两个方法。然后, 我们通过不断的改变Y坐标，不断的擦除、绘制、擦除、绘制来达到动态粒子的效果。该粒子对于我们掌握canvas基础的api有一些帮助。</p>
+</blockquote>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Canvas/" rel="tag"># Canvas</a>
+          
+            <a href="/tags/CSS/" rel="tag"># CSS</a>
+          
+            <a href="/tags/HTML/" rel="tag"># HTML</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/10/canvas基础知识/" rel="next" title="canvas基础知识">
+                <i class="fa fa-chevron-left"></i> canvas基础知识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">侯先诚</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">17</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/imhxc" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="505421473@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#创建画布"><span class="nav-number">1.</span> <span class="nav-text">创建画布</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绘制静态粒子"><span class="nav-number">2.</span> <span class="nav-text">绘制静态粒子</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建一个粒子类"><span class="nav-number">2.1.</span> <span class="nav-text">创建一个粒子类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#添加绘制方法"><span class="nav-number">2.2.</span> <span class="nav-text">添加绘制方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#发射🚀"><span class="nav-number">2.3.</span> <span class="nav-text">发射🚀</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#让粒子动起来"><span class="nav-number">3.</span> <span class="nav-text">让粒子动起来</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#添加移动方法"><span class="nav-number">3.1.</span> <span class="nav-text">添加移动方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开始循环发射🚀"><span class="nav-number">3.2.</span> <span class="nav-text">开始循环发射🚀</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">侯先诚</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cyt5AM5Tz';
+      var conf = 'c5cbf941130ee875a4ec7004192c72df';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
