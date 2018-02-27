@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="前端," />
 
 
 
@@ -79,14 +79,21 @@
 
 
 
+<meta name="description" content="Array对象大家都已经熟悉了, 但是肯定会多多少少有一些忽略的知识点。">
+<meta name="keywords" content="前端">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JS拖拽上传文件">
-<meta property="og:url" content="http://yoursite.com/2018/02/26/JS拖拽上传文件/index.html">
+<meta property="og:title" content="forEach遍历Array引发的一个知识点">
+<meta property="og:url" content="http://yoursite.com/2018/02/27/forEach遍历Array引发的一个知识点/index.html">
 <meta property="og:site_name" content="侯先诚">
+<meta property="og:description" content="Array对象大家都已经熟悉了, 但是肯定会多多少少有一些忽略的知识点。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-26T02:38:26.229Z">
+<meta property="og:image" content="http://oscyun0zw.bkt.clouddn.com/QQ20180227-103432@2x.png">
+<meta property="og:image" content="http://oscyun0zw.bkt.clouddn.com/ss.png">
+<meta property="og:updated_time" content="2018-02-27T03:32:12.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JS拖拽上传文件">
+<meta name="twitter:title" content="forEach遍历Array引发的一个知识点">
+<meta name="twitter:description" content="Array对象大家都已经熟悉了, 但是肯定会多多少少有一些忽略的知识点。">
+<meta name="twitter:image" content="http://oscyun0zw.bkt.clouddn.com/QQ20180227-103432@2x.png">
 
 
 
@@ -116,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/02/26/JS拖拽上传文件/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/02/27/forEach遍历Array引发的一个知识点/"/>
 
 
 
 
 
-  <title>JS拖拽上传文件 | 侯先诚</title>
+  <title>forEach遍历Array引发的一个知识点 | 侯先诚</title>
   
 
 
@@ -269,7 +276,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/26/JS拖拽上传文件/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/27/forEach遍历Array引发的一个知识点/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="侯先诚">
@@ -286,7 +293,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JS拖拽上传文件</h1>
+          <h1 class="post-title" itemprop="name headline">forEach遍历Array引发的一个知识点</h1>
         
 
         <div class="post-meta">
@@ -298,8 +305,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-26T10:38:26+08:00">
-                2018-02-26
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-27T10:28:56+08:00">
+                2018-02-27
               </time>
             
 
@@ -318,8 +325,8 @@
                 <i class="fa fa-comment-o"></i>
               </span>
               
-                <a href="/2018/02/26/JS拖拽上传文件/#SOHUCS" itemprop="discussionUrl">
-                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/02/26/JS拖拽上传文件/" itemprop="commentsCount"></span>
+                <a href="/2018/02/27/forEach遍历Array引发的一个知识点/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/02/27/forEach遍历Array引发的一个知识点/" itemprop="commentsCount"></span>
                 </a>
               
             
@@ -332,6 +339,10 @@
 
           
 
+          
+              <div class="post-description">
+                  Array对象大家都已经熟悉了, 但是肯定会多多少少有一些忽略的知识点。
+              </div>
           
 
         </div>
@@ -347,7 +358,48 @@
       
 
       
-        
+        <blockquote>
+<p>在一次敲代码中, 对一个数组调用了forEach迭代器, 发现一个诡异的现象: 自定义的key无法被迭代出来。</p>
+</blockquote>
+<h2 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a>发现问题</h2><p>需要注意的是, 上面对于诡异现象的描述: ‘自定义的key无法被迭代出来’ 这句话是不严谨的。</p>
+<p>看代码:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line">arr[<span class="string">'user'</span>] = <span class="string">'Tom'</span>;</span><br><span class="line"><span class="comment">// 开始调用forEach</span></span><br><span class="line">arr.forEach(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(item);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>如果你调用这段代码, 会发现: key等于user的值被忽略了, 没有打印出来。<br><img src="http://oscyun0zw.bkt.clouddn.com/QQ20180227-103432@2x.png" alt=""></p>
+<p>但是, 当我使用<code>for...in</code>的时候, key等于user的值却可以打印出来。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line">arr[<span class="string">'user'</span>] = <span class="string">'Tom'</span>;</span><br><span class="line"><span class="keyword">for</span>(<span class="keyword">let</span> item <span class="keyword">in</span> arr) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(item)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://oscyun0zw.bkt.clouddn.com/ss.png" alt=""></p>
+<p>当然，<code>for...in</code>循环出来的是<code>key</code>，这并不影响我们获取<code>value</code>。</p>
+<blockquote>
+<p>到现在, 我们就可以提出一个疑问： 为什么forEach迭代器无法迭代出自定义的值,  而for…in却可以？</p>
+</blockquote>
+<p>要想知道这个问题, 我们必须先了解<code>Array</code>对象中的元素, 或者说什么样的数据才可以算是<code>arr</code>中的元素?</p>
+<p>在ECMA官方文档中发现了这样的介绍：</p>
+<blockquote>
+<p>Array objects give special treatment to a certain class of property names. A property name P (in the form of a String value) is an array index if and only if ToString(ToUint32(P)) is equal to P and ToUint32(P) is not equal to 2^32−1. A property whose property name is an array index is also called an element.</p>
+</blockquote>
+<p>翻译成通俗的话就是:</p>
+<blockquote>
+<p><strong>只有属性名称的数值不等于2^32^−1(或者说在0到2^32^-2之间)才会被视为数组的元素</strong></p>
+</blockquote>
+<p><a href="http://www.ecma-international.org/ecma-262/5.1/index.html#sec-15.4" target="_blank" rel="noopener">文档地址</a></p>
+<p>我们又知道forEach只迭代数组的元素, 而我们自定义的key无法满足规范, 所以严格上不能成为数组元素, 因此无法被迭代出来。</p>
+<p>而<code>for...in</code>则不然, 它负责的是遍历所有<strong>可枚举的属性</strong>, 职责功能不同, 所以造就了结果不同。</p>
+<p>在文章开始我们说了 ‘自定义的key无法被迭代出来’ 的说法是不严谨的， 相信到这里应该也可以明白为什么不严谨了。其实根本原因是因为属性名被转换后的数值必须不等于2^32^−1才算是数组元素。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>通过上面的分析, 我们可以得到下面几个结论:</p>
+<ul>
+<li>严格意义上, 并不是所有在数组中出现的元素都属于数组;</li>
+<li>元素的属性值在经过转换后需要不等于2^32^−1才算是数组元素;</li>
+<li><code>forEach</code>只遍历属于该数组的元素;</li>
+<li><code>map</code>也只会便利属于概述组的元素;</li>
+<li><code>JSON.stringify</code>也只转换属于该数组的元素;</li>
+<li><code>for...in</code>、<code>for</code>等都只负责遍历可枚举的属性，只要该属性可枚举， 就遍历该属性。</li>
+</ul>
+<p>大家可以试一下其他的一些迭代方法， 比如<code>reduce</code>、<code>for...of</code>等等。</p>
+<p>需要注意的是, 对于<code>JSON.stringify</code>方法也会忽略不属于数组的元素, 也可以理解为其无法表示这种东西, 所以忽略。</p>
+<p>例如: </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line">arr[name] = <span class="string">'Tom'</span>;</span><br></pre></td></tr></table></figure>
+<p>像这样的, 值为<code>Tom</code>的元素他没有索引位置, 如果用<code>JSON.stringify</code>的实在是想不出该如何表示<code>name=Tom</code>这个元素。</p>
+<p>以上都是我个人理解, 因为只有官方文档可以参考， 所以有很大的可能出现理解错误, 欢迎指出。</p>
+
       
     </div>
     
@@ -362,6 +414,12 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+        </div>
+      
 
       
       
@@ -371,8 +429,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/26/FormData的使用/" rel="next" title="FormData的使用及文件上传">
-                <i class="fa fa-chevron-left"></i> FormData的使用及文件上传
+              <a href="/2018/02/26/JS拖拽上传文件/" rel="next" title="JS拖拽上传文件">
+                <i class="fa fa-chevron-left"></i> JS拖拽上传文件
               </a>
             
           </div>
@@ -380,10 +438,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/02/27/forEach遍历Array引发的一个知识点/" rel="prev" title="forEach遍历Array引发的一个知识点">
-                forEach遍历Array引发的一个知识点 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -440,8 +494,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -517,6 +580,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#发现问题"><span class="nav-number">1.</span> <span class="nav-text">发现问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">2.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
