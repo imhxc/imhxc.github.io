@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://oscyun0zw.bkt.clouddn.com/QQ20180227-103432@2x.png">
 <meta property="og:image" content="http://oscyun0zw.bkt.clouddn.com/ss.png">
-<meta property="og:updated_time" content="2018-02-27T03:32:12.000Z">
+<meta property="og:updated_time" content="2018-03-01T16:43:27.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="forEach遍历Array引发的一个知识点">
 <meta name="twitter:description" content="Array对象大家都已经熟悉了, 但是肯定会多多少少有一些忽略的知识点。">
@@ -358,7 +358,8 @@
       
 
       
-        <blockquote>
+        <p><strong>大家可以阅读另外一篇文章：js对象深如探析，里面有清晰的结论。或者建议大家直接阅读《你不知道的JavaScript》第三章:对象。</strong></p>
+<blockquote>
 <p>在一次敲代码中, 对一个数组调用了forEach迭代器, 发现一个诡异的现象: 自定义的key无法被迭代出来。</p>
 </blockquote>
 <h2 id="发现问题"><a href="#发现问题" class="headerlink" title="发现问题"></a>发现问题</h2><p>需要注意的是, 上面对于诡异现象的描述: ‘自定义的key无法被迭代出来’ 这句话是不严谨的。</p>
@@ -391,7 +392,7 @@
 <li><code>forEach</code>只遍历属于该数组的元素;</li>
 <li><code>map</code>也只会便利属于概述组的元素;</li>
 <li><code>JSON.stringify</code>也只转换属于该数组的元素;</li>
-<li><code>for...in</code>、<code>for</code>等都只负责遍历可枚举的属性，只要该属性可枚举， 就遍历该属性。</li>
+<li><code>for...in</code>等都只负责遍历可枚举的属性，只要该属性可枚举， 就遍历该属性。</li>
 </ul>
 <p>大家可以试一下其他的一些迭代方法， 比如<code>reduce</code>、<code>for...of</code>等等。</p>
 <p>需要注意的是, 对于<code>JSON.stringify</code>方法也会忽略不属于数组的元素, 也可以理解为其无法表示这种东西, 所以忽略。</p>
@@ -438,6 +439,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/01/js对象深入探析/" rel="prev" title="js对象深入探析">
+                js对象深入探析 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -530,7 +535,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>

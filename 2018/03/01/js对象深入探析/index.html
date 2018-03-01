@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="JavaScript,前端,阅读笔记," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="对象并无复杂的地方，拿来即用。但是如果我们深入去研究，会发现对象也有很多的坑，很多需要注意学习的特性，以及在每个场景下我们又需要注意什么。">
+<meta name="keywords" content="JavaScript,前端,阅读笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="js对象深入探析">
+<meta property="og:url" content="http://yoursite.com/2018/03/01/js对象深入探析/index.html">
+<meta property="og:site_name" content="侯先诚">
+<meta property="og:description" content="对象并无复杂的地方，拿来即用。但是如果我们深入去研究，会发现对象也有很多的坑，很多需要注意学习的特性，以及在每个场景下我们又需要注意什么。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://oscyun0zw.bkt.clouddn.com/d.png">
+<meta property="og:updated_time" content="2018-03-01T16:39:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="js对象深入探析">
+<meta name="twitter:description" content="对象并无复杂的地方，拿来即用。但是如果我们深入去研究，会发现对象也有很多的坑，很多需要注意学习的特性，以及在每个场景下我们又需要注意什么。">
+<meta name="twitter:image" content="http://oscyun0zw.bkt.clouddn.com/d.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/01/js对象深入探析/"/>
+
+
+
+
+
+  <title>js对象深入探析 | 侯先诚</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">侯先诚</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">侯先诚的个人博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/01/js对象深入探析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="侯先诚">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="侯先诚">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">js对象深入探析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-01T16:59:47+08:00">
+                2018-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2018/03/01/js对象深入探析/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/03/01/js对象深入探析/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  对象并无复杂的地方，拿来即用。但是如果我们深入去研究，会发现对象也有很多的坑，很多需要注意学习的特性，以及在每个场景下我们又需要注意什么。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>这篇笔记整理来源于《你不知道的JavaScript》和《JavaScript权威指南》这两本书的对象相关章节。欢迎大家支持正版，尊重知识。</p>
+</blockquote>
+<h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><blockquote>
+<p>我们都知道对象有两种基本的定义方式: 声明(字面量)形式和构造(new)形式。<br>需要注意的是, 通过<code>Object.create()</code>也可以创建一个对象。 不过严格意义上来说, 使用这种方法是为了给新创建的对象指定的原型对象和属性, 由于目的不同, 所以我个人不喜欢将<code>Object.create</code>方法归纳到定义对象方法中。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  声明（字面量）形式</span></span><br><span class="line"><span class="keyword">let</span> myObj1 = &#123;&#125;</span><br><span class="line"><span class="comment">// 构造（new）形式</span></span><br><span class="line"><span class="keyword">let</span> myObj2 = <span class="keyword">new</span> <span class="built_in">Object</span>()</span><br><span class="line"><span class="comment">// Object.create</span></span><br><span class="line"><span class="keyword">let</span> myObj3 = <span class="built_in">Object</span>.create(<span class="literal">null</span>);</span><br></pre></td></tr></table></figure>
+<p>需要注意的是, 通过<code>Object.create()</code>方法创建对象, 必须传递一个参数: 需要继承的原型, 如果没有, 则传递null。所以一般的， 如果我们需要继承某个对象的时候，可以选择这种方法。</p>
+<p>声明形式和构造形式本质上没有什么异同, 如果非要说有什么区别，也就是在添加属性的时候有些不同, 声明形式可以在创建的时候就可以添加多个键值对, 但是构造形式必须逐个添加。</p>
+<h2 id="类型"><a href="#类型" class="headerlink" title="类型"></a>类型</h2><blockquote>
+<p>对象是JavaScript的基础。在JavaScript中一共有六种数据类型，加上ES6新增的<code>Symbol</code>，一共7种。</p>
+</blockquote>
+<ul>
+<li>string</li>
+<li>number</li>
+<li>boolean</li>
+<li>null</li>
+<li>undefined</li>
+<li>symbol</li>
+<li>object</li>
+</ul>
+<p>需要注意的是, 这里只得不是JS中的内置对象, 所以我们这里用了小写形式来描述, 了解过包装对象的应该很清楚这种区别。</p>
+<p>在这六种类型中, <code>string</code>、<code>number</code>、<code>boolean</code>、<code>null</code>、<code>undefined</code>、<code>symbol</code>本身并不是对象, 都属<strong>于简单基本类型</strong>。在这里, 我们会有一个误解: <code>null</code>是一个对象类型。因为执行<code>typeof null</code>后会返回<code>object</code>形式的字符串。但是这里要告诉大家, 这是一个BUG, 或者说是历史遗留问题。</p>
+<blockquote>
+<p>不同的对象在底层都表示为二进制, 在JavaScript中二进制前三位都为0的话会被判定为<code>object</code>类型, <code>null</code>的二进制表示全是0, 自然前三位也是0, 所以执行<code>typeof</code>会返回<code>object</code>字符串。</p>
+</blockquote>
+<p><em>在后来的W3C工作草案中, 曾经提出要修改这一问题, 让<code>typeof null</code>返回正确的值, 可惜这样会导致所有运行的网址出现严重的问题, 所以就将错就错了。(从网上道听途说的)</em></p>
+<p><strong>另外， 还有一种说话也是需要纠正的: JavaScript中一切皆对象。</strong>, 这明显是错误的。</p>
+<p>或许你会奇怪, 为什么没有<code>array</code>和<code>function</code>类型，实际上，这两种都属于<strong>对象子类型</strong>, 或者叫复杂的基本类型。特别是数组, 在我早前的一篇笔记中曾经写过”为什么有些自定义的键值对并不能算是数组元素“，并且写的比较混乱，现在回过头来看， 有很多理解不当甚至错误的地方。通过后面的介绍, 会明白许多。</p>
+<h2 id="内置对象"><a href="#内置对象" class="headerlink" title="内置对象"></a>内置对象</h2><ul>
+<li>String</li>
+<li>Number</li>
+<li>Boolean</li>
+<li>Object</li>
+<li>Function</li>
+<li>Array</li>
+<li>RegExp</li>
+<li>Date</li>
+<li>Error</li>
+</ul>
+<p>上述的几种对象都是由JS提供给我们的, 不同于前面的数据类型概念, 这里的内置对象可以理解为是一种可以操作调用的函数(例如使用new操作符), 所以一定要区分, 虽然名字的表示一样, 但是叫法和概念完全不一样。在《JavaScript高级程序设计》这本书中, 有一章“引用类型”做了讲解。</p>
+<h2 id="对象的操作"><a href="#对象的操作" class="headerlink" title="对象的操作"></a>对象的操作</h2><blockquote>
+<p>对象的内容是由一些存储在特定位置（任意类型）的值组成的, 我们称之为属性, 其中属性又具有属性名和属性值。其实在JS引擎中, 我们定义一个变量，并且赋值，通常这个变量只是一个指向该值的存储位置的指针。同样的，在对象内部也是这样, 对象内部存储的属性，也仅仅是一个指向具体值的指针，也就是属性名。</p>
+</blockquote>
+<h3 id="属性访问"><a href="#属性访问" class="headerlink" title="属性访问"></a>属性访问</h3><p>我们思考下列代码:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> myObj = &#123;</span><br><span class="line">    name: <span class="string">'Tom'</span></span><br><span class="line">&#125;;</span><br><span class="line">myObj.name; <span class="comment">// Tom</span></span><br><span class="line">myObj[<span class="string">'name'</span>]; <span class="comment">//Tom</span></span><br></pre></td></tr></table></figure></p>
+<p>我们通过.操作符和[]操作符都可以成功访问到属性值，所以我们有两种方法访问属性值： </p>
+<ul>
+<li>.操作符（属性访问）</li>
+<li>[]操作符(键访问或者数组访问)</li>
+</ul>
+<p>对于何时使用属性访问，何时使用键访问，想必大家都很清楚。</p>
+<p>这里我想说的是:在对象中，<strong>属性名永远都是字符串</strong>。即使你用string形式以外的其他值作为属性名, 它都会被转换成一个字符串, 即使是数字也不例外。</p>
+<p>如果我们需要使用一个变量来定义属性名， 除了可以使用键访问的形式: <code>let a = &#39;name&#39;; myobj[a] = &#39;Tom&#39;</code>, 还可以使用ES6提供的<strong>可计算属性名</strong>方法：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> prefix = <span class="string">'foo'</span>;</span><br><span class="line"><span class="keyword">let</span> myObj = &#123;</span><br><span class="line">    [prefix + <span class="string">'bar'</span>]: <span class="string">'hello'</span></span><br><span class="line">&#125;</span><br><span class="line">myObj[<span class="string">'foobar'</span>]; <span class="comment">// hello</span></span><br></pre></td></tr></table></figure>
+<p>通过使用[]来包裹一个表达式即可。</p>
+<h3 id="复制对象"><a href="#复制对象" class="headerlink" title="复制对象"></a>复制对象</h3><blockquote>
+<p>在程序中有深复制和浅赋值的概念。</p>
+</blockquote>
+<h3 id="属性描述符"><a href="#属性描述符" class="headerlink" title="属性描述符"></a>属性描述符</h3><blockquote>
+<p>对象的属性除了具有属性值, 还有其他另外3个特性, 通过自定义这三个特性, 我们可以定一个类似ES6中通过<code>const</code>关键字定义的常量，以及其他需求。</p>
+</blockquote>
+<p>首先我们需要知道都有哪三个特性:</p>
+<ul>
+<li><code>writable</code>: 决定是否可修改属性的值</li>
+<li><code>enumerable</code>: 决定该属性是否可枚举</li>
+<li><code>configurable</code>: 决定该属性是否可以配置</li>
+</ul>
+<p>上面三个属性默认都是<code>true</code>。</p>
+<h4 id="Object-getOwnPropertyDescriptor"><a href="#Object-getOwnPropertyDescriptor" class="headerlink" title="Object.getOwnPropertyDescriptor()"></a>Object.getOwnPropertyDescriptor()</h4><p><code>Object.getOwnPropertyDescriptor()</code>方法可以用来获取一个属性的描述符。接受两个参数，分别是目标对象和目标对象中的属性名，存在则返回一个属性描述对象，否则返回undefined。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> myObj = &#123;</span><br><span class="line">    name: <span class="string">'小明'</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">Object</span>.getOwnPropertyDescriptor(myObj, <span class="string">'name'</span>);</span><br></pre></td></tr></table></figure>
+<p>返回如下结果:</p>
+<p><img src="http://oscyun0zw.bkt.clouddn.com/d.png" alt=""></p>
+<p>可以发现, 除了<code>value</code>, 还有前面我们提到的另外三个特性，并且默认都为<code>true</code>。 </p>
+<h4 id="Object-defineProperty"><a href="#Object-defineProperty" class="headerlink" title="Object.defineProperty()"></a>Object.defineProperty()</h4><p>既然可以获取到, 肯定也可以修改。我们可以使用<code>Object.defineProperty()</code>方法来修改特性。接收三个参数，分别是目标对象、需要修改的目标对象中的属性和配置项。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Object</span>.defineProperty(myObj, <span class="string">'name'</span>, &#123;</span><br><span class="line">    value: <span class="string">'小红'</span>,</span><br><span class="line">    writable: <span class="literal">false</span>,</span><br><span class="line">    enumerable: <span class="literal">false</span>,</span><br><span class="line">    configurable: <span class="literal">false</span></span><br><span class="line">&#125;);</span><br><span class="line">myObj.name; <span class="comment">//  小红</span></span><br><span class="line">myObj.name = <span class="string">'小黑'</span>; <span class="comment">// 此处修改无效</span></span><br><span class="line">myObj.name; <span class="comment">//  小红</span></span><br></pre></td></tr></table></figure>
+<p>上面我们将<code>value</code>赋值为<code>小红</code>, 并且将另外三个特性全部修改为<code>false</code>。当我们尝试修改<code>name</code>属性值的时候, 发现该操作失效了， 说明我们的<code>writable:false</code>配置生效了。<br>同样的， 如果我们尝试遍历该对象上的属性的时候,会跳过该属性, 因为我们对该属性设置不可枚举: <code>enumerable: false</code>。如果我们再次使用<code>Object.defineProperty()</code>来修改<code>name</code>属性的特性的时候, 也会失败, 并且直接报错。</p>
+<p>需要注意的以下几点:</p>
+<ul>
+<li><code>configurable</code>是单向操作，也就是说当设置为false的时候，不能在重新设置为true。</li>
+<li><code>configurable</code>为false不可配置的时候, 有一个列外: 当<code>writable</code>为true的时候，可以设置为false, 但是反过来从false设置为true就不行。</li>
+<li>在严格模式下<code>use strict</code>，当writable为false的时候，再次赋值会报错。</li>
+<li>当<code>configurable</code>为false的时候, 还会禁止使用<code>delete</code>删除这个属性。</li>
+</ul>
+<h4 id="不变性"><a href="#不变性" class="headerlink" title="不变性"></a>不变性</h4><h4 id="禁止扩展"><a href="#禁止扩展" class="headerlink" title="禁止扩展"></a>禁止扩展</h4><h2 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h2><blockquote>
+<p>之所以把数组拎出来放在这里讲, 是因为前面我们说了, 数组就是对象类型的子类型。并且有一些特殊的知识点需要我们注意。</p>
+</blockquote>
+<p>我们都知道数组也支持键访问([])形式，不过稍有区别的是： 数组有一套更加结构化的存储机制，但是仍然不限制数据类型。<strong>数组期望的是数值下标</strong>，也就是说值存储的位置，也叫索引，并且必须是整数。对于什么才是合法索引，具体可以参考<a href="http://www.ecma-international.org/ecma-262/5.1/index.html#sec-15.4" target="_blank" rel="noopener">官方文档</a>。</p>
+<p>另外, 我们还可以给数组添加属性:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line">arr.name = <span class="string">'Tom'</span>;</span><br><span class="line">arr.length; <span class="comment">//3</span></span><br><span class="line">arr.name; <span class="comment">// Tom</span></span><br></pre></td></tr></table></figure></p>
+<p>我们发现，我们给<code>arr</code>添加了一个<code>name</code>属性， <code>length</code>属性并未发生变化, 而且通过属性访问的形式依然可以访问到<code>name</code>的属性值。</p>
+<p>同样的, 我们通过下面的形式来重新添加<code>name</code>属性:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">arr[name] = <span class="string">'Tom'</span>;</span><br><span class="line">arr.length; <span class="comment">//3</span></span><br><span class="line">arr.name; <span class="comment">// Tom</span></span><br></pre></td></tr></table></figure></p>
+<p>运行之后, 结果一样。</p>
+<blockquote>
+<p>通过上面的的实际操作我们可以发现: 如果给数组定义一个非整数的键然后赋值, 严格意义上来说, 这不属于数组元素, 或者说不是一个合法的数组索引, 只是一个数组上的属性。</p>
+</blockquote>
+<p>当然, 这种定义方式也是可以成为合法索引的：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">arr[<span class="string">'3'</span>] = <span class="number">4</span>;</span><br><span class="line">arr.length = <span class="number">4</span>;</span><br></pre></td></tr></table></figure></p>
+<p>这就可以解释之前一篇文章的疑问了，一般的例如<code>map</code>、<code>reduce</code>、<code>for</code>、<code>forEach</code>等都是遍历数组元素, 所以数组上的属性无法遍历到, 而例如<code>for...in</code>则是遍历一个对象的可枚举属性, 不管你是不是数组元素。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/JavaScript/" rel="tag"># JavaScript</a>
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/阅读笔记/" rel="tag"># 阅读笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/02/27/forEach遍历Array引发的一个知识点/" rel="next" title="forEach遍历Array引发的一个知识点">
+                <i class="fa fa-chevron-left"></i> forEach遍历Array引发的一个知识点
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">侯先诚</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/imhxc" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="505421473@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本语法"><span class="nav-number">1.</span> <span class="nav-text">基本语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#类型"><span class="nav-number">2.</span> <span class="nav-text">类型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内置对象"><span class="nav-number">3.</span> <span class="nav-text">内置对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#对象的操作"><span class="nav-number">4.</span> <span class="nav-text">对象的操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#属性访问"><span class="nav-number">4.1.</span> <span class="nav-text">属性访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制对象"><span class="nav-number">4.2.</span> <span class="nav-text">复制对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#属性描述符"><span class="nav-number">4.3.</span> <span class="nav-text">属性描述符</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Object-getOwnPropertyDescriptor"><span class="nav-number">4.3.1.</span> <span class="nav-text">Object.getOwnPropertyDescriptor()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Object-defineProperty"><span class="nav-number">4.3.2.</span> <span class="nav-text">Object.defineProperty()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不变性"><span class="nav-number">4.3.3.</span> <span class="nav-text">不变性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#禁止扩展"><span class="nav-number">4.3.4.</span> <span class="nav-text">禁止扩展</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数组"><span class="nav-number">5.</span> <span class="nav-text">数组</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">侯先诚</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cyt5AM5Tz';
+      var conf = 'c5cbf941130ee875a4ec7004192c72df';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
