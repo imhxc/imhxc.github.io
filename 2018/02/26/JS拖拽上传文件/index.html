@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="前端,HTML5,JS," />
 
 
 
@@ -79,14 +79,18 @@
 
 
 
+<meta name="description" content="源码地址 拖拽的基本API 在拖动的过程中，分为拖动元素时的事件和将拖动的东西放置到目标元素时触发的事件。每个过程都有各自的API  拖动元素时依此触发如下事件:   dragstart: 开始拖动。 drag: 拖动中，并且在拖动过程中持续触发。 dragend: 拖动结束。  同样的, 当我将一个东西拖到目标元素上的时候, 目标元也会依次触发如下事件：  dragenter: 进入到目标元素区">
+<meta name="keywords" content="前端,HTML5,JS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JS拖拽上传文件">
 <meta property="og:url" content="http://yoursite.com/2018/02/26/JS拖拽上传文件/index.html">
 <meta property="og:site_name" content="侯先诚">
+<meta property="og:description" content="源码地址 拖拽的基本API 在拖动的过程中，分为拖动元素时的事件和将拖动的东西放置到目标元素时触发的事件。每个过程都有各自的API  拖动元素时依此触发如下事件:   dragstart: 开始拖动。 drag: 拖动中，并且在拖动过程中持续触发。 dragend: 拖动结束。  同样的, 当我将一个东西拖到目标元素上的时候, 目标元也会依次触发如下事件：  dragenter: 进入到目标元素区">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-02-26T02:38:26.229Z">
+<meta property="og:updated_time" content="2018-03-01T07:56:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JS拖拽上传文件">
+<meta name="twitter:description" content="源码地址 拖拽的基本API 在拖动的过程中，分为拖动元素时的事件和将拖动的东西放置到目标元素时触发的事件。每个过程都有各自的API  拖动元素时依此触发如下事件:   dragstart: 开始拖动。 drag: 拖动中，并且在拖动过程中持续触发。 dragend: 拖动结束。  同样的, 当我将一个东西拖到目标元素上的时候, 目标元也会依次触发如下事件：  dragenter: 进入到目标元素区">
 
 
 
@@ -347,7 +351,40 @@
       
 
       
-        
+        <p><a href="https://github.com/imhxc/drag-upload" target="_blank" rel="noopener">源码地址</a></p>
+<h2 id="拖拽的基本API"><a href="#拖拽的基本API" class="headerlink" title="拖拽的基本API"></a>拖拽的基本API</h2><blockquote>
+<p>在拖动的过程中，分为拖动元素时的事件和将拖动的东西放置到目标元素时触发的事件。每个过程都有各自的API</p>
+</blockquote>
+<p>拖动元素时依此触发如下事件: </p>
+<ul>
+<li><code>dragstart</code>: 开始拖动。</li>
+<li><code>drag</code>: 拖动中，并且在拖动过程中持续触发。</li>
+<li><code>dragend</code>: 拖动结束。</li>
+</ul>
+<p>同样的, 当我将一个东西拖到目标元素上的时候, 目标元也会依次触发如下事件：</p>
+<ul>
+<li><code>dragenter</code>: 进入到目标元素区域</li>
+<li><code>dragover</code>: 在目标元素区域内持续拖动, 并且会不断触发。</li>
+<li><code>dragleave</code>: 离开了目标元素区域。</li>
+<li><code>drop</code>: 被拖动的东西放置到了目标元素内。</li>
+</ul>
+<p>需要注意的是，<code>dragleave</code>和<code>drop</code>事件不会同时发生, 也就是说, 如果将拖动元素成功放置到了目标元素上， 则会触发<code>drop</code>事件，整个拖动过程就结束了, <code>dragleave</code>也就无从触发了。<code>dragleave</code>事件只有在拖动过程中移除了目标元素才会触发。</p>
+<p>需要搞清楚的是，上面两种情况所触发的事件针对的目标不一样： 一个是拖动元素所触发的事件，另一个是目标元素所触发的事件。</p>
+<p>基本使用代码:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 拖动元素时触发的事件绑定</span></span><br><span class="line"><span class="keyword">let</span> oDiv = <span class="built_in">document</span>.getElementById(<span class="string">'oDiv'</span>);</span><br><span class="line">oDiv.addEventListener(<span class="string">'dragstart'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'dragstart: 开始拖动'</span>);</span><br><span class="line">&#125;);</span><br><span class="line">oDiv.addEventListener(<span class="string">'drag'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'drag: 正在拖动...'</span>);</span><br><span class="line">&#125;);</span><br><span class="line">oDiv.addEventListener(<span class="string">'dragend'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'dragend: 拖动结束'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// 目标元素触发事件同理</span></span><br><span class="line"><span class="comment">// ....</span></span><br></pre></td></tr></table></figure>
+<h2 id="拖拽上传"><a href="#拖拽上传" class="headerlink" title="拖拽上传"></a>拖拽上传</h2><blockquote>
+<p>掌握了基本的API，我们就可以实现一个简单的文件拖拽上传。在我的<a href="https://imhxc.github.io/2018/02/26/FormData%E7%9A%84%E4%BD%BF%E7%94%A8/" target="_blank" rel="noopener">另外一篇文章</a>中介绍了如何使用FormData上传文件，本质上和这里的拖拽上传都是一个道理，只不过触发上传的机制不一样，我们可以直接将其中的代码copy过来。</p>
+</blockquote>
+<p>封装一个upload函数:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">upload</span>(<span class="params">oFile</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 初始化一个formdata</span></span><br><span class="line">    <span class="keyword">let</span> formdata = <span class="keyword">new</span> FormData(); </span><br><span class="line">    <span class="comment">// ⚠️ ⚠️ ⚠️</span></span><br><span class="line">    <span class="comment">// 这里我们需要处理下上传的文件</span></span><br><span class="line">    <span class="built_in">Array</span>.from(oFile.files).forEach(<span class="function"><span class="params">item</span> =&gt;</span> &#123;</span><br><span class="line">        formdata.append(<span class="string">'ofile'</span>, item);</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建xhr对象，发送异步请求</span></span><br><span class="line">    <span class="keyword">let</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">    xhr.open(<span class="string">'POST'</span>,<span class="string">`http://localhost:8888/api`</span>, <span class="literal">true</span>);</span><br><span class="line">    xhr.send(formdata); <span class="comment">// 直接传递给send</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 监听请求状态</span></span><br><span class="line">    xhr.onreadystatechange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (xhr.readyState == <span class="number">4</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (xhr.status &gt;= <span class="number">200</span> &amp;&amp; xhr.status &lt; <span class="number">300</span> || xhr.status == <span class="number">304</span>) &#123;</span><br><span class="line">                alert(<span class="string">'成功'</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>假设我们有一个div， 代码如下:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"oDiv"</span> <span class="attr">style</span>=<span class="string">"width: 200px; height: 200px; background: red"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> oDiv = <span class="built_in">document</span>.getElementById(<span class="string">'oDiv'</span>);</span><br><span class="line">oDiv.addEventListener(<span class="string">'dragenter'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'你已经拖着文件进来了, 快松手。'</span>)</span><br><span class="line">&#125;);</span><br><span class="line">oDiv.addEventListener(<span class="string">'dragover'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    e.stopPropagation();</span><br><span class="line">    e.preventDefault();</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'别晃了，快松手吧~!'</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;, <span class="literal">true</span>);</span><br><span class="line">oDiv.addEventListener(<span class="string">'dragleave'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'你离开了我，呜呜~!'</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">//开始上传</span></span><br><span class="line">oDiv.addEventListener(<span class="string">'drop'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">    e.stopPropagation();</span><br><span class="line">    e.preventDefault();</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'上传成功, 文件列表：'</span>);</span><br><span class="line">    <span class="comment">// 执行上传操作</span></span><br><span class="line">    upload(e.dataTransfer);</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;,<span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+<p>关键的在于监听<code>drop</code>事件, 因为这里才是我们需要上传的最佳时机。需要注意的是, 为了防止我们拖放到浏览器的文件被打开, 所以我们需要添加<code>stopPropagation</code>和<code>preventDefault</code>两个事件来阻止默认冒泡和默认事件。</p>
+<p>同时, 我们可以用<code>File</code>的API来获取拖拽的文件列表: <code>dataTransfer.files</code>。</p>
+<p>另外， 主要注意的是：正常情况下，如果我们想要获取文件的路径是无法实现的，我们只会得到一个虚假的路径。形式如：<code>C:\fakepath\xxx.jpg</code>。</p>
+<p><a href="https://github.com/imhxc/drag-upload/blob/master/www/1.html" target="_blank" rel="noopener">拖拽上传前台代码</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/DataTransfer" target="_blank" rel="noopener">dataTransfer文档</a><br><a href="https://developer.mozilla.org/zh-CN/docs/Web/API/File" target="_blank" rel="noopener">File文档</a></p>
+
       
     </div>
     
@@ -361,6 +398,16 @@
     
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/HTML5/" rel="tag"># HTML5</a>
+          
+            <a href="/tags/JS/" rel="tag"># JS</a>
+          
+        </div>
       
 
       
@@ -440,8 +487,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -478,7 +534,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -517,6 +573,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#拖拽的基本API"><span class="nav-number">1.</span> <span class="nav-text">拖拽的基本API</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#拖拽上传"><span class="nav-number">2.</span> <span class="nav-text">拖拽上传</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
