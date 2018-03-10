@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="前端,webpack,loader,阅读笔记," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Loader可以看作是一个翻译员，类似将一种语言翻译成另一种语言。在实际的转换过程中，就是将一些代码转化成另一种格式的代码。">
+<meta name="keywords" content="前端,webpack,loader,阅读笔记">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack Loader学习记录">
+<meta property="og:url" content="http://yoursite.com/2018/03/09/webpack-Loader学习记录/index.html">
+<meta property="og:site_name" content="侯先诚">
+<meta property="og:description" content="Loader可以看作是一个翻译员，类似将一种语言翻译成另一种语言。在实际的转换过程中，就是将一些代码转化成另一种格式的代码。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-10T06:20:01.441Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webpack Loader学习记录">
+<meta name="twitter:description" content="Loader可以看作是一个翻译员，类似将一种语言翻译成另一种语言。在实际的转换过程中，就是将一些代码转化成另一种格式的代码。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/09/webpack-Loader学习记录/"/>
+
+
+
+
+
+  <title>webpack Loader学习记录 | 侯先诚</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">侯先诚</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">侯先诚的个人博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/09/webpack-Loader学习记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="侯先诚">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="侯先诚">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">webpack Loader学习记录</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T19:51:45+08:00">
+                2018-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-comment-o"></i>
+              </span>
+              
+                <a href="/2018/03/09/webpack-Loader学习记录/#SOHUCS" itemprop="discussionUrl">
+                  <span id="changyan_count_unit" class="post-comments-count hc-comment-count" data-xid="2018/03/09/webpack-Loader学习记录/" itemprop="commentsCount"></span>
+                </a>
+              
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+              <div class="post-description">
+                  Loader可以看作是一个翻译员，类似将一种语言翻译成另一种语言。在实际的转换过程中，就是将一些代码转化成另一种格式的代码。
+              </div>
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Loader是什么"><a href="#Loader是什么" class="headerlink" title="Loader是什么"></a>Loader是什么</h2><blockquote>
+<p>Loader可以将源文件经过转化后输出新的结果，并且一个文件还可以经过多个Loader转换。比如下面我们要说的一个例子。</p>
+</blockquote>
+<p>以处理SCSS文件为例:</p>
+<ul>
+<li>先将SCSS源代码交给<code>sass-loader</code>, 将CSSS转换成CSS。</li>
+<li>将<code>sass-loader</code>输出的CSS提交给<code>css-loader</code>处理，找出CSS中的依赖关系，压缩CSS等操作。</li>
+<li>将<code>css-loader</code>输出的CSS提交给<code>style-loader</code>处理，转换成JS代码。</li>
+</ul>
+<p>通过上面的步骤我们发现, loader的每一个处理过程都像一个管道，走完这个管道便进入下一个管道。或者说，处理过程需要有顺序的链式执行，先<code>sass-loader</code>，再<code>css-loader</code>，最后<code>style-loader</code>。</p>
+<p>代码如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="built_in">module</span>: &#123;</span><br><span class="line">        rules: [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">// 增加对SCSS文件的支持</span></span><br><span class="line">                test: <span class="regexp">/\.scss/</span>,</span><br><span class="line">                <span class="comment">// SCSS文件的处理顺序为先sass-loader，然后css-loader，再style-loader</span></span><br><span class="line">                use: [</span><br><span class="line">                    <span class="string">'style-loader'</span>,</span><br><span class="line">                    &#123;</span><br><span class="line">                        loader: <span class="string">'css-loader'</span>,</span><br><span class="line">                        <span class="comment">// 向css-loader传入配置项</span></span><br><span class="line">                        options:&#123;</span><br><span class="line">                            minmize: <span class="literal">true</span>,</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;,</span><br><span class="line">                    <span class="string">'sass-loader'</span></span><br><span class="line">                ]</span><br><span class="line">            &#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>另外，webpack是运行在Node.js上的，一个Loader其实就是一个Node.js模块，这个模块需要导出一个函数。这个导出的函数的工作就是获得处理前的原内容，对原内容处理后，返回处理后的内容。</p>
+</blockquote>
+<p>一个最基础的Loader源码如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">source</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// source为compiler传递给Loader的一个文件的原内容</span></span><br><span class="line">    <span class="comment">// 该函数需要返回处理后的内容。</span></span><br><span class="line">    <span class="comment">// 会做一些非常复杂的操作 、转换</span></span><br><span class="line">    <span class="keyword">return</span> source; <span class="comment">// 返回source，此处只是为了模拟</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>由于Loader运行在Node.js中，所以我们可以调用任意Node.js自带的API，或者安装第三方模块进行调用。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> sass = <span class="built_in">require</span>(<span class="string">'node-sass'</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">source</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> sass(source);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="Loader的职责"><a href="#Loader的职责" class="headerlink" title="Loader的职责"></a>Loader的职责</h3><blockquote>
+<p>由前面代码我们可以看出，我们的每个Loader都只负责一个事情，也就是说职责是单一的，只需要完成一种特殊的转换。 如果你个源文件需要像上面的一样，需要经过多次转换，则就需要多个Loader，并且保持着正确的顺去，进行链式的调用和转换，最后的Loader将处理结果返回给webpack。所以，我们在开发Loader的时候，需要保持其Loader的单一性，只关心输出和输入。</p>
+</blockquote>
+<h2 id="Loader-Content"><a href="#Loader-Content" class="headerlink" title="Loader Content"></a>Loader Content</h2><blockquote>
+<p>Loader Content 意思是Loader上下文，进一步解释就是：Loader Content表示在 loader 内使用 this 可以访问的一些方法或属性。</p>
+</blockquote>
+<p>比如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.callback(</span><br><span class="line">  err: <span class="built_in">Error</span> | <span class="literal">null</span>,</span><br><span class="line">  content: string | Buffer,</span><br><span class="line">  sourceMap?: SourceMap,</span><br><span class="line">  meta?: any</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<p>后面，我们会使用一些Loader Content的API。</p>
+<h2 id="配置options"><a href="#配置options" class="headerlink" title="配置options"></a>配置options</h2><blockquote>
+<p>前面我们对Loader有了一个基本的认识，了解了Loader是什么，可以做什么，有什么特性。接下来，我们可以着手看看具体如何去操作、编写Loader。这里我们可以通过options来配置一些我们想要的需求，就是给Loader设置一些参数选项，告诉Loader需要额外做一些什么样的处理，比如告诉Loader这个文件还需要进行压缩。</p>
+</blockquote>
+<p>其实在前面，如果仔细一点，我们会发现有这样一段代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">use: [</span><br><span class="line">    <span class="string">'style-loader'</span>,</span><br><span class="line">    &#123;</span><br><span class="line">        loader: <span class="string">'css-loader'</span>,</span><br><span class="line">        <span class="comment">// 向css-loader传入配置项</span></span><br><span class="line">        options:&#123;</span><br><span class="line">            minmize: <span class="literal">true</span>,</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">'sass-loader'</span></span><br><span class="line">]</span><br></pre></td></tr></table></figure></p>
+<p>这段代码中，<code>css-loader</code>就被设置了<code>options</code>。我们给<code>css-loader</code>设置了<code>minmize: true</code>的参数，告诉它请压缩该文件。</p>
+<h3 id="怎么获取options"><a href="#怎么获取options" class="headerlink" title="怎么获取options"></a>怎么获取options</h3><blockquote>
+<p>前面我们虽然知道如何设置options，并且传递参数给Loader，但是我们如何在自己编写的Loader中获取用户传递的options呢？</p>
+</blockquote>
+<p>其实我们可以这么做：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> loaderUtils = rqeuire(<span class="string">'loader-utils'</span>);</span><br><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">source</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 获取用户当前Loader传入的options</span></span><br><span class="line">    <span class="keyword">const</span> options = loaderUtils.getOptions(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">return</span> source;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面代码中，我们直接返回了<code>source</code>，这里在说明一下，正常开发时，我们几乎都需要对传递过来的<code>source</code>进行一些转换操作，甚至会添加一些其他代码或文件，最后返回这个处理后的代码给下一个Loader或webpack。</p>
+<p>如果我们使用过一些<code>Vue</code>、<code>React</code>或者<code>Angular</code>等框架，项目打包后会生成一些形如<code>xxxx.map</code>的<code>.map</code>文件，其实这是<code>Source Map</code>，对应我们刚才说的”<em>甚至会添加一些其他代码或文件</em>“。<code>Source Map</code>文件作用是方便我们调试源码。</p>
+<p>所以，在有些情况下，我们需要将转换后的代码附带一些如<code>Source Map</code>文件返回给webapck或者下一个Loader，就需要这么去做。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">source</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 通过this.callback高速webpack返回的结果</span></span><br><span class="line">    <span class="keyword">this</span>.callback(<span class="literal">null</span>, source, sourceMaps);</span><br><span class="line">    <span class="comment">// 放我们使用this.callback返回内容的时候，该Loader必须返回undefined</span></span><br><span class="line">    <span class="comment">// 原因在于为了让webpack知道该Loader返回的结果在this.callback中，而不是return 中</span></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在上面代码中，<code>this.callback</code>是一个API，一个Webpack向Loader注入的某种东西的API，用来方便Loader和Webpack之间的通信。</p>
+</blockquote>
+<p>我们来看看如何具体使用<code>this.callback()</code>：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">this</span>.callback(</span><br><span class="line">    <span class="comment">// 当无法转换原内容的时候，为webpack返回一个error</span></span><br><span class="line">    err: <span class="built_in">Error</span> || <span class="literal">null</span>,</span><br><span class="line">    <span class="comment">// 原内容转换后的内容</span></span><br><span class="line">    content: string || Buffer,</span><br><span class="line">    <span class="comment">// 用于通过转换后的内容得出原内容的Source Map，以方便调试</span></span><br><span class="line">    sourceMaop?: SourceMap,</span><br><span class="line">    <span class="comment">// 如果本次转换为原内容生成了AST语法树，则可以将这AST返回，</span></span><br><span class="line">    <span class="comment">// 以方便之后需要AST的Loader复用该AST，避免重复生成AST，提升性能</span></span><br><span class="line">    abstractSyntaxTree?: AST</span><br><span class="line">);</span><br></pre></td></tr></table></figure></p>
+<p><em>上面的注释中我们提到了AST语法树，所谓AST，就是”抽象语法树（Abstract Syntax Tree）”，将源代码转换成一种对应的树状结构，如果熟悉React中的JSX语法会对这种结构有一些熟悉，这里给大家提供一个<a href="http://esprima.org/demo/parse.html#" target="_blank" rel="noopener">网站</a>，可以更加直观的理解，认知什么是AST。</em></p>
+<p>我们需要知道的是, Source Map的生成很耗时，通常在开发环境下才会生成Source Map，在其他环境下不用生成，以便加速构建。因此，Webpack为Loader提供了<code>this.sourceMap</code>API去告诉Loader是否需要构建Source Map文件。</p>
+<h2 id="同步与异步"><a href="#同步与异步" class="headerlink" title="同步与异步"></a>同步与异步</h2><blockquote>
+<p>我们对同步异步的概念都很清楚，在Loader进行工作的时候也不例外，也存在同步异步的情况。</p>
+</blockquote>
+<p>一般的，比如前面我们的代码，都是同步进行的。而在某些情况下，会存在异步情况。比如，我们的Loader在进行操作的时候，会做一些网络请求，这就是异步的现象。</p>
+<p>那么，异步的转换操作，可以这么写：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">source</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 告诉webpack本次转换是异步的，Loader会在callback中回调结果</span></span><br><span class="line">    <span class="keyword">var</span> callback = <span class="keyword">this</span>.async();</span><br><span class="line">    someAsyncOperation(source, <span class="function"><span class="keyword">function</span>(<span class="params">err, result, sourceMaps, ast</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 通过callback返回异步执行后的结果</span></span><br><span class="line">        callback(err, result, sourceMap, ast);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面我们对Loader进行了一个基本的认识，并且知道了一些简单的API，除了这些常用API，在[官方文档[(<a href="https://doc.webpack-china.org/api/loaders/)中列举了所有的API。我们知道了Loader就是一种转换工具，可以像管道一样，一个接着一个向后传递处理好的数据，链式的顺序的调用，每个Loader只负责处理一种事情，处理好之后交给下一个Loader或者返回给webpack。并且在这个过程中，会存在异步和同步之分。另外，我们主要是需要通过配置options来实现需求。" target="_blank" rel="noopener">https://doc.webpack-china.org/api/loaders/)中列举了所有的API。我们知道了Loader就是一种转换工具，可以像管道一样，一个接着一个向后传递处理好的数据，链式的顺序的调用，每个Loader只负责处理一种事情，处理好之后交给下一个Loader或者返回给webpack。并且在这个过程中，会存在异步和同步之分。另外，我们主要是需要通过配置options来实现需求。</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/前端/" rel="tag"># 前端</a>
+          
+            <a href="/tags/webpack/" rel="tag"># webpack</a>
+          
+            <a href="/tags/loader/" rel="tag"># loader</a>
+          
+            <a href="/tags/阅读笔记/" rel="tag"># 阅读笔记</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/06/npm报错记录/" rel="next" title="npm报错记录">
+                <i class="fa fa-chevron-left"></i> npm报错记录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+    <div class="comments" id="comments">
+      <div id="SOHUCS"></div>
+    </div>
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">侯先诚</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/imhxc" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="505421473@qq.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Loader是什么"><span class="nav-number">1.</span> <span class="nav-text">Loader是什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Loader的职责"><span class="nav-number">1.1.</span> <span class="nav-text">Loader的职责</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Loader-Content"><span class="nav-number">2.</span> <span class="nav-text">Loader Content</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置options"><span class="nav-number">3.</span> <span class="nav-text">配置options</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#怎么获取options"><span class="nav-number">3.1.</span> <span class="nav-text">怎么获取options</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#同步与异步"><span class="nav-number">4.</span> <span class="nav-text">同步与异步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">侯先诚</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+  
+    <script type="text/javascript">
+    (function(){
+      var appid = 'cyt5AM5Tz';
+      var conf = 'c5cbf941130ee875a4ec7004192c72df';
+      var width = window.innerWidth || document.documentElement.clientWidth;
+      if (width < 960) {
+      window.document.write('<script id="changyan_mobile_js" charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/mobile/wap-js/changyan_mobile.js?client_id=' + appid + '&conf=' + conf + '"><\/script>'); } else { var loadJs=function(d,a){var c=document.getElementsByTagName("head")[0]||document.head||document.documentElement;var b=document.createElement("script");b.setAttribute("type","text/javascript");b.setAttribute("charset","UTF-8");b.setAttribute("src",d);if(typeof a==="function"){if(window.attachEvent){b.onreadystatechange=function(){var e=b.readyState;if(e==="loaded"||e==="complete"){b.onreadystatechange=null;a()}}}else{b.onload=a}}c.appendChild(b)};loadJs("https://changyan.sohu.com/upload/changyan.js",function(){
+        window.changyan.api.config({appid:appid,conf:conf})});
+      }
+    })();
+    </script>
+    <script type="text/javascript" src="https://assets.changyan.sohu.com/upload/plugins/plugins.count.js"></script>
+  
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
