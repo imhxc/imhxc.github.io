@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="侯先诚">
 <meta property="og:description" content="Loader可以看作是一个翻译员，类似将一种语言翻译成另一种语言。在实际的转换过程中，就是将一些代码转化成另一种格式的代码。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-03-10T06:22:50.890Z">
+<meta property="og:updated_time" content="2018-03-10T06:24:21.410Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webpack Loader">
 <meta name="twitter:description" content="Loader可以看作是一个翻译员，类似将一种语言翻译成另一种语言。在实际的转换过程中，就是将一些代码转化成另一种格式的代码。">
@@ -404,7 +404,7 @@
 </blockquote>
 <p>一般的，比如前面我们的代码，都是同步进行的。而在某些情况下，会存在异步情况。比如，我们的Loader在进行操作的时候，会做一些网络请求，这就是异步的现象。</p>
 <p>那么，异步的转换操作，可以这么写：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span>(<span class="params">source</span>) </span>&#123;</span><br><span class="line">    <span class="comment">// 告诉webpack本次转换是异步的，Loader会在callback中回调结果</span></span><br><span class="line">    <span class="keyword">var</span> callback = <span class="keyword">this</span>.async();</span><br><span class="line">    someAsyncOperation(source, <span class="function"><span class="keyword">function</span>(<span class="params">err, result, sourceMaps, ast</span>) </span>&#123;</span><br><span class="line">        <span class="comment">// 通过callback返回异步执行后的结果</span></span><br><span class="line">        callback(err, result, sourceMap, ast);</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面我们对Loader进行了一个基本的认识，并且知道了一些简单的API，除了这些常用API，在[官方文档[(<a href="https://doc.webpack-china.org/api/loaders/)中列举了所有的API。我们知道了Loader就是一种转换工具，可以像管道一样，一个接着一个向后传递处理好的数据，链式的顺序的调用，每个Loader只负责处理一种事情，处理好之后交给下一个Loader或者返回给webpack。并且在这个过程中，会存在异步和同步之分。另外，我们主要是需要通过配置options来实现需求。" target="_blank" rel="noopener">https://doc.webpack-china.org/api/loaders/)中列举了所有的API。我们知道了Loader就是一种转换工具，可以像管道一样，一个接着一个向后传递处理好的数据，链式的顺序的调用，每个Loader只负责处理一种事情，处理好之后交给下一个Loader或者返回给webpack。并且在这个过程中，会存在异步和同步之分。另外，我们主要是需要通过配置options来实现需求。</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>上面我们对Loader进行了一个基本的认识，并且知道了一些简单的API，除了这些常用API，在<a href="https://doc.webpack-china.org/api/loaders/" target="_blank" rel="noopener">官方文档</a>中列举了所有的API。我们知道了Loader就是一种转换工具，可以像管道一样，一个接着一个向后传递处理好的数据，链式的顺序的调用，每个Loader只负责处理一种事情，处理好之后交给下一个Loader或者返回给webpack。并且在这个过程中，会存在异步和同步之分。另外，我们主要是需要通过配置options来实现需求。</p>
 
       
     </div>
