@@ -100,4 +100,4 @@ theme: cactus
 deploy:
   type: git
   repository: git@github.com:imhxc/blog.git
-  branch: 3.0
+  branch: 'master'
