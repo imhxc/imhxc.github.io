@@ -1,5 +1,5 @@
 ---
-title: The relationship between Mixin, HOC, Hooks .
+title: The relationship between Mixin、HOC And Hooks.
 date: 2020-05-25 18:39:04
 tags: React
 ---
