@@ -3,9 +3,9 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: coder.
-subtitle: ''
-description: ''
+title: NICEFE.DEV.
+subtitle: 'I am me, A different firework.'
+description: 'I am me, A different firework.'
 keywords:
 author: houxiancheng
 language: en
@@ -13,7 +13,7 @@ timezone: ''
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://imhxc.github.io/blog
+url: https://nicefe.dev
 root: /blog
 permalink: :year/:month/:day/:title/
 permalink_defaults:
