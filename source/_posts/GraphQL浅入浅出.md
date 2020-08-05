@@ -1,7 +1,7 @@
 ---
 title: GraphQL浅入浅出
 date: 2020-06-22 18:09:48
-tags:
+tags: GraphQL
 ---
 
 ## 前言
