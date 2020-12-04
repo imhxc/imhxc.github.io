@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>JavaScript 中的一些类型小知识</title>
+  
+  <link rel="canonical" href="http://example.com/2020/12/04/some-types-in-js/">
+  
+  <meta name="description" content="StringString 用于表示文本大小，其最大长度是 2^53 - 1；该长度，一般在开发中是够用的。 另外，在 Safari 浏览器中，input 标签中的文本内容如果过长，会出现内容消失的 BUG。 String 的意思并不是「字符串」，而是字符串的 UTF16 编码；一些字符串的方法和属性">
+  
+  
+  <meta name="author" content="John Doe">
+  
+  <meta property="og:image" content="http://example.comundefined">
+  
+  <meta property="og:site_name" content="Hexo" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="JavaScript 中的一些类型小知识" />
+  
+  <meta property="og:description" content="StringString 用于表示文本大小，其最大长度是 2^53 - 1；该长度，一般在开发中是够用的。 另外，在 Safari 浏览器中，input 标签中的文本内容如果过长，会出现内容消失的 BUG。 String 的意思并不是「字符串」，而是字符串的 UTF16 编码；一些字符串的方法和属性">
+  
+  <meta property="og:url" content="http://example.com/2020/12/04/some-types-in-js/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="JavaScript 中的一些类型小知识">
+  
+  <meta name="twitter:description" content="StringString 用于表示文本大小，其最大长度是 2^53 - 1；该长度，一般在开发中是够用的。 另外，在 Safari 浏览器中，input 标签中的文本内容如果过长，会出现内容消失的 BUG。 String 的意思并不是「字符串」，而是字符串的 UTF16 编码；一些字符串的方法和属性">
+  
+  
+  <meta name="twitter:image" content="http://example.comundefined">
+  
+  <meta name="twitter:url" content="http://example.com/2020/12/04/some-types-in-js/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="../fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+<meta name="generator" content="Hexo 5.2.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Hi Folks.
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+          
+          <a href="/about" class="ml">About</a>
+          
+        
+        
+          
+            <a href="mailto:505421473@qq.com" target="_blank" class="ml">Email</a>
+          
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>JavaScript 中的一些类型小知识</h2>
+
+  <h2 id="String"><a href="#String" class="headerlink" title="String"></a>String</h2><h3 id="String-用于表示文本大小，其最大长度是-2-53-1；"><a href="#String-用于表示文本大小，其最大长度是-2-53-1；" class="headerlink" title="String 用于表示文本大小，其最大长度是 2^53 - 1；"></a>String 用于表示文本大小，其最大长度是 2^53 - 1；</h3><p>该长度，一般在开发中是够用的。</p>
+<p><em>另外，在 Safari 浏览器中，input 标签中的文本内容如果过长，会出现内容消失的 BUG。</em></p>
+<h3 id="String-的意思并不是「字符串」，而是字符串的-UTF16-编码；"><a href="#String-的意思并不是「字符串」，而是字符串的-UTF16-编码；" class="headerlink" title="String 的意思并不是「字符串」，而是字符串的 UTF16 编码；"></a>String 的意思并不是「字符串」，<strong>而是字符串的 UTF16 编码</strong>；</h3><p>一些字符串的方法和属性如 <code>charAt</code>、<code>charCodeAt</code>、<code>length</code> ，<strong>这些针对的的都是 UTF16 编码</strong>。</p>
+<p>所以，<strong>字符串的最大长度，实际上是受字符串的编码长度影响的</strong>。换句话说，在 JavaScript 中，字符串的长度并不是我们视觉所看到的字数的长度。</p>
+<p>但是，在实际开发中，绝大多数的字符串长度都和我们视觉所看到的字符数量长度相等，如下面代码中，<code>str</code> 长度就是等于视觉看到 3 个字母的数量。</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token keyword">const</span> str <span class="token operator">=</span> <span class="token string">'abc'</span><span class="token punctuation">;</span>
+str<span class="token punctuation">.</span>length<span class="token punctuation">;</span> <span class="token comment">// 3</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>这里就要提一下字符串的国际标准。在现行的字符串国际标准下，字符是以 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Unicode">Unicode</a> 的方式表示的。每一个 Unicode 的码点表示一个字符。理论上，Unicode 的范围是无限的。</p>
+<p>另外，UTF 是 Unicode 的一个编码实现方式，规定了码点在计算机中的表示方式，常见的有 UTF8、UTF16 等。</p>
+<p>Unicode 的码点通常用「U + 四个或五个数字」来表示，其中这里的「数字」是十六进制的码点值。<strong>0 ～ 63536（U+000 ～ U+FFFF）的码点被称为基本字符区域（BMP）</strong>。</p>
+<p>BMP（基本字符区域）域涵盖了我们最常见的字符，这些个字符可以用 UTF16 来定长表示的，也就是说，<strong>所有在基本区域的字符的 UTF16 的编码长度都是和字符数相等的</strong>，这也就解释了为什么前面 <code>str.length</code> 得到的长度和我们视觉所看到的长度一致。</p>
+<p>JavaScript 字符串把每个 UTF16 单元当作一个字符串来处理，这也带来一个问题，就是处理非 BMP 的字符的时候，你要额外注意长度的处理。如：</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token comment">// 这里说的问题，即如果超出了该范围，则 JS 中获取该字符的长度可能是 2，比如 一些 emoji。</span>
+<span class="token keyword">const</span> str <span class="token operator">=</span> <span class="token string">'👋'</span><span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>str<span class="token punctuation">.</span>length<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 2</span>
+
+<span class="token comment">// 这样会导致一些问题，如通过 charAt(0) 访问该字符的时候，实际上只能访问该 emoji 表情中的一部分.</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<blockquote>
+<p>之所以这么设计，是因为 JavaScript 继承自 Java，最新的标准中是这么解释的：这样的设计是为了“性能和尽可能实现起来简单”，因为现实中很少使用到 BMP 之外的字符。</p>
+</blockquote>
+<h3 id="JavaScript-中的字符串永远无法变更"><a href="#JavaScript-中的字符串永远无法变更" class="headerlink" title="JavaScript 中的字符串永远无法变更"></a>JavaScript 中的字符串永远无法变更</h3><p>在 JavaScript 中，一旦字符串构造出来，无法用任何方式改变字符串的内容，所以字符串具有值类型的特征。如：</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token keyword">var</span> str <span class="token operator">=</span> <span class="token string">'hello'</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 你无法使用该方法去变更 hello 这个字符串的内容，注意，我这里说的是 hello 这个字符串，不是 str 这个变量</span>
+str<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token string">'Lucy, h'</span><span class="token punctuation">;</span>
+<span class="token comment">// 依旧输出 hello</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>str<span class="token punctuation">)</span><span class="token punctuation">;</span> 
+
+<span class="token comment">// 当然，你可能会说可以这么干：</span>
+str <span class="token operator">=</span> <span class="token string">'Lucy, hello'</span><span class="token punctuation">;</span>
+
+<span class="token comment">// 可以这么干，只是对 str 这个变量进行了重新赋值，并不是对字符串内容做修改。</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="Number"><a href="#Number" class="headerlink" title="Number"></a>Number</h2><p>Number 类型表示我们通常意义上的「数字」，这个数字大致对应数学中的有理数，当然，在计算机中，我们有一定的精度限制。</p>
+<p>JavaScript 中的 Number 类型基本符合 IEEE 754-2008 规定的双精度浮点数规则，但是 JavaScript 为了表达几个额外的场景语言（比如不让除以 0 出错，而引入的无穷大的概念。）</p>
+<ul>
+<li>NaN，该值占用了 9007199254740990 个特殊数字，用来表示 NaN ，这原本是符合 IEEE 规则的数字；（这也可以解释为什么 NaN !== NaN）</li>
+<li>Infinity 无穷大</li>
+<li>-Infinity 负无穷大</li>
+</ul>
+<h3 id="处理-0、-0-以及-Infinity、-Infinity-的关系"><a href="#处理-0、-0-以及-Infinity、-Infinity-的关系" class="headerlink" title="处理 +0、-0 以及 Infinity、-Infinity 的关系"></a>处理 +0、-0 以及 Infinity、-Infinity 的关系</h3><p>在 Javascript 中，会有 +0 和 -0 的存在，在加法运算中他们没有区别，但是在除法的场合要特别注意，不要忘记检测 -0，避免得到无穷大的情况，而区分 +0 和 -0 的方式，可以通过如下方式去检测：</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token comment">// 通过检测 1/x 是 Infinity 还是 -Infinity。</span>
+<span class="token keyword">const</span> num <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token number">1</span> <span class="token operator">/</span> <span class="token number">0</span> <span class="token operator">===</span> <span class="token number">Infinity</span><span class="token punctuation">;</span>
+<span class="token number">1</span> <span class="token operator">/</span> <span class="token operator">-</span><span class="token number">0</span> <span class="token operator">===</span> <span class="token operator">-</span><span class="token number">Infinity</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<p><em>根据双精度浮点数的定义，Number 类型中有效的整数范围是 -0x1fffffffffffff（13个f）至 0x1fffffffffffff ，所以 Number 无法精确表示此范围外的整数。</em></p>
+<p>小数在转化为二进制时，通过小数部分不停乘2取整，知道消暑部分为0，这种方式导致一些小数乘2永远做不到小数部分为0，只能取一定精度的值表示，进而导致精度误差的出现。</p>
+<p>事实上，摆脱编程语言的限制，仅仅从浮点数的角度来看，浮点数是可以比较的，只不过由于精度的问题可能导致一些在计算中出现一些问题，所以 Js 才规定浮点数不可以进行比较。</p>
+<p>对于在 JavaScript 中，检测浮点数的正确的方式是：</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token comment">// Number.EPSILON 的意义在于，该常量是 JavaScript 中能够表示的最小精度值，当所计算的结果误差小于这个精度，则可以理解为没有误差</span>
+Math<span class="token punctuation">.</span><span class="token function">asb</span><span class="token punctuation">(</span><span class="token number">0.1</span> <span class="token operator">+</span> <span class="token number">0.2</span> <span class="token operator">-</span> <span class="token number">0.3</span><span class="token punctuation">)</span> <span class="token operator">&lt;=</span> Number<span class="token punctuation">.</span><span class="token constant">EPSILON</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+<h2 id="Symbol"><a href="#Symbol" class="headerlink" title="Symbol"></a>Symbol</h2><ul>
+<li>Symbol 是 ES6 引入的新类型，他是一些非字符串对象的 key 的集合，在 ES6 规范中，整个对象系统被 Symbol 重塑。</li>
+<li>一些标准中提到的 Symbol，可以在全局的 Symbol 函数的属性中找到。例如：我们可以使用 Symbol.iterator 来自定义 for..of 在对象上的行为<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token keyword">var</span> obj <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Object</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+obj<span class="token punctuation">[</span>Symbol<span class="token punctuation">.</span>iterator<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">var</span> v <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">&#123;</span>
+    <span class="token function-variable function">next</span><span class="token operator">:</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span> <span class="token punctuation">&#123;</span> value<span class="token operator">:</span> v<span class="token operator">++</span><span class="token punctuation">,</span> done<span class="token operator">:</span> v <span class="token operator">></span> <span class="token number">10</span> <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">var</span> v <span class="token keyword">of</span> obj<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>v<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+</li>
+</ul>
+<p>这些 Symbol 形式的标准，构成了语言的一类接口形式，它允许编写与语言更加紧密的 API。</p>
+<h2 id="Object"><a href="#Object" class="headerlink" title="Object"></a>Object</h2><p>在 JavaScript 中，对象的定义是“属性的集合”，属性分为<em>数据属性</em>和<em>访问器属性</em>，二者都是 key-value 的结构，key 可以是字符串或者 Symbol 类型。</p>
+<p><em>事实上，JavaScript 中的 「类」仅仅是运行时对象的一个私有属性，而 JavaScript 中是无法自定义类型的。</em></p>
+<p><em>我们需要区分基本类型和对象类型。在基本类型中，都在对象类型有“侵袭：“</em></p>
+<ul>
+<li>Number；</li>
+<li>String；</li>
+<li>Boolean；</li>
+<li>Symbol；</li>
+</ul>
+<p>所以，我们必须认识到 3 和 new Number(3) 是完全不同的值，他们一个是 Number 类型，一个是对象类型；</p>
+<p><em>Number、String、Boolean 这三个构造器是两用的，当跟 new 搭配时，他们产生对象，当直接调用时，他们表示强制类型转换</em></p>
+<p><em>Symbol 函数比较特殊，直接调用 new 会报错，但他仍然是 Symbol 对象的构造器。</em></p>
+<p><em>JavaScript 语言设计上试图模糊对象和基本类型之间的关系，比如我们日常代码可以直接在基本类型上调用对象的一些属性或方法：</em></p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token string">"abc"</span><span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+<p><em>点(.)运算符为我们提供了「装箱操作」，他会根据基础类型构造一个临时对象，使得我们能够在基础类型上调用对象的方法和属性。</em></p>
+<h2 id="类型转换"><a href="#类型转换" class="headerlink" title="类型转换"></a>类型转换</h2><h3 id="String-To-Number"><a href="#String-To-Number" class="headerlink" title="String To Number"></a>String To Number</h3><p>字符串数字的类型转换，存在一个语法结构，类型转换支持十进制、二进制、八进制和十六进制，比如：</p>
+<ul>
+<li>30</li>
+<li>0b111；</li>
+<li>0o13；</li>
+<li>0xFF</li>
+</ul>
+<p>此外，JavaScript 支持的字符串语法还包括正负号科学计数法，可以使用大写或者小写的 e 来表示：</p>
+<ul>
+<li>1e3；</li>
+<li>-1e - 2</li>
+</ul>
+<p><em>需要注意的是，parseInt 和 parseFloat 并不使用这个转换，所以支持的语法跟这里不尽相同。</em></p>
+<p>在不传入第二个参数的情况下，parseInt 只支持 16 进制前缀 “0x”，而且会忽略非数字字符，也不支持科学计数法。</p>
+<p>在一些古老的浏览器环境中，parseInf 还支持 0 开头的数字作为 8 进制前缀，这是很多错误的来源，所以在任何情况下，都建议传入 parseInt 的第二个参数，而 parseFloat 则直接把原字符串作为十进制来解析，不会引入任何其他的进制。</p>
+<h3 id="Number-To-String"><a href="#Number-To-String" class="headerlink" title="Number To String"></a>Number To String</h3><p>在较小的范围内，数字到字符串的转换是完全符合基本直觉的，即 <code>1.toString()</code> 返回 <code>&#39;1&#39;</code> 。但是当数值较大较小的时候，toStirng 返回的结果可能就是科学计数法的字符串形式。</p>
+<p>这个是由 JavaScript 内部的相关算法来决定的，算法细节繁多，简单理解就是为了保证所产生的字符串不会过长。</p>
+<h3 id="装箱转换"><a href="#装箱转换" class="headerlink" title="装箱转换"></a>装箱转换</h3><p>每一种基本类型 Number、String、Boolean、Symbol 在对象中都有对应的类，所谓装箱转换，<em>就是把基本类型转化为对应的对对象，他是类型转换中一种相当重要的种类。</em></p>
+<p>前面提到，全局的 Symbol 对象无法使用 new 来调用，但是我们可以利用装箱机制来得到一个 Symbol 对象，我们可以利用一个函数的 call 方法来强迫产生装箱。</p>
+<p>我们可以定义一个函数，函数里面只有 return this，然后我们调用函数的 call 方法到一个 Symbol 类型的值上，这样就会产生一个 symbolObject。</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token keyword">var</span> symbolObject <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">call</span><span class="token punctuation">(</span><span class="token function">Symbol</span><span class="token punctuation">(</span><span class="token string">'a'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token keyword">typeof</span> symbolObject<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// object</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>symbolObject <span class="token keyword">instanceof</span> <span class="token class-name">Symbol</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// true</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span>symbolObject<span class="token punctuation">.</span>constructor <span class="token operator">==</span> Symbol<span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// true</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>上面方法过于繁琐，我们可以直接使用内置的 Object 函数，显示的调用装箱能力：</p>
+<pre class="line-numbers language-none"><code class="language-none">var symbolObject &#x3D; Object(Symbol(&#39;a&#39;));
+console.log(typeof symbolObject); &#x2F;&#x2F; object
+console.log(symbolObject instanceof Symbol); &#x2F;&#x2F; true
+console.log(symbolObject.constructor &#x3D;&#x3D; Symbol); &#x2F;&#x2F; true<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<p>每一类的装箱对象皆有私有的 class 属性，这些属性可以用 Objet.prototype.toString 获取：</p>
+<pre class="line-numbers language-none"><code class="language-none">var symbolObject &#x3D; Object(Symbol(&#39;a&#39;));
+
+Object.prototype.toString.call(symbolObject); &#x2F;&#x2F; [object Symbol]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>这是为什么我们可以看到有些情况可以用该方法去判断其他的数据类型。</p>
+<p>之所以可以这么识别，另一方面也是因为在JS 中，没有任何方法可以更改私有的 Class 属性，因此，Object.prototype.toString 是可以准确识别对象对应的基本类型的方法，他比 instanceof 更加准确。</p>
+<p>需要注意的是，call 本身会产生装箱操作，所以需要配合 typeof 来区分基本来行还是对象类型。</p>
+<h3 id="拆箱转换"><a href="#拆箱转换" class="headerlink" title="拆箱转换"></a>拆箱转换</h3><p>前面提到了装箱转换，对应的，也会有拆箱转换。</p>
+<p>在 JavaScript 中，规定了一个 ToPrimitive 函数，他是对象类型到基本类型的转换，即拆箱转换。</p>
+<p><em>对象到 String 和 Number 的转换都遵循「先拆箱再转换」的规则，通过拆箱转换，把对象变成基本类型，再从基本类型转换为对应的 String 或者 Number。</em></p>
+<blockquote>
+<p>这也就对应了我们平时所见到的一些怪异的面试题。</p>
+</blockquote>
+<p>拆箱转换会尝试调用 valueOf 和  toString 来获得拆箱后的基本类型，如果 valueOf 和 toString 都不存在，或者没有返回基本类型，则会产生类型错误 TypeError。</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token keyword">var</span> o <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+  <span class="token function-variable function">valueOf</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'valueof'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token keyword">return</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token function-variable function">toString</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'toString'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token keyword">return</span> <span class="token punctuation">&#123;</span><span class="token punctuation">&#125;</span> <span class="token punctuation">&#125;</span>  
+<span class="token punctuation">&#125;</span>
+
+o <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">;</span>
+<span class="token comment">// valueOf</span>
+<span class="token comment">// toString </span>
+<span class="token comment">// 拆箱转换失败，抛出 TypeError</span>
+
+<span class="token function">String</span><span class="token punctuation">(</span>o<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">// 先执行 toString</span>
+<span class="token comment">// valueOf</span>
+<span class="token comment">// TypeError</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<blockquote>
+<p>同时需要注意的是，vlaueOf 和 toString 具体哪个先执行，取决于你的后续操作</p>
+</blockquote>
+<p>另外，我们也可以显示的设置对象的 <code>@@toPrimitive Symbol</code> 来覆盖原有的行为（就是前面的拆箱转换过程）。</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token comment">// 依旧使用前面的对象 o</span>
+o<span class="token punctuation">[</span>Symbol<span class="token punctuation">.</span>toPrimitive<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=></span> <span class="token punctuation">&#123;</span> console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token string">'toPromitive'</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token keyword">return</span> <span class="token string">'hello'</span> <span class="token punctuation">&#125;</span>
+
+o <span class="token operator">+</span> <span class="token string">''</span><span class="token punctuation">;</span>
+<span class="token comment">// toPromitive</span>
+<span class="token comment">// hello</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+  <p> — Dec 4, 2020</p>
+  
+
+
+          <div class="row mt-2">
+  
+    <div class="eight columns">
+      <p id="madewith">Made with ❤ and
+        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
+        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
+        </a>
+        
+        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+        
+    </div>
+
+    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
+    <div class="four columns mb-3 posisi" >
+      
+      <a class="ml-0 footer-link icon" href="https://github.com/imhxc" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
+        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+      </a>
+      
+
+      
+
+      
+
+      
+
+    </div>
+  
+</div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>
