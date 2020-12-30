@@ -291,7 +291,7 @@ a:focus:not(.icon) {
 }
 
 /* a:hover {
-  background-color: #0FA0CE;
+  background-color: #D23669;
   transition: to top 200ms ease-out;
 
 }
@@ -315,7 +315,7 @@ a:focus:not(.icon) {
   right: -0.1em;
   bottom: 0;
   transition: top 200ms cubic-bezier(0, .8, .13, 1);
-  background-color: #0FA0CE;
+  background-color: #D23669;
 }
 
 .link:hover:after {
