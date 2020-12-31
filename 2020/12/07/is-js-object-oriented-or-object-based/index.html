@@ -1,193 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang=en>
 <head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="前言这篇文章所涉及的知识基本上是我早就掌握了的，但是这次我尝试带着问题，从另一个角度去学习、探索 「JavaScript 为什么是面向对象语言」？ 两个问题在这之前，我们先明确两个问题。JavaScript 中，有许许多多的对象，但是在 ES6 之前，JavaScript 没有类的概念。 即使到了 ES6，类的实现也仅仅是一个语法糖，ES6 中的类的绝大部分功能，ES5 都可以做到。新的 clas">
+<meta property="og:type" content="article">
+<meta property="og:title" content="新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象">
+<meta property="og:url" content="http://example.com/2020/12/07/is-js-object-oriented-or-object-based/index.html">
+<meta property="og:site_name" content="Hey Guys.">
+<meta property="og:description" content="前言这篇文章所涉及的知识基本上是我早就掌握了的，但是这次我尝试带着问题，从另一个角度去学习、探索 「JavaScript 为什么是面向对象语言」？ 两个问题在这之前，我们先明确两个问题。JavaScript 中，有许许多多的对象，但是在 ES6 之前，JavaScript 没有类的概念。 即使到了 ES6，类的实现也仅仅是一个语法糖，ES6 中的类的绝大部分功能，ES5 都可以做到。新的 clas">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-12-07T07:47:40.000Z">
+<meta property="article:modified_time" content="2020-12-07T07:48:36.298Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象</title>
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
 
-  <!-- Minima -->
-  <!-- Hexo theme created by @adisaktijrs -->
+    <!-- persian styles -->
+    
+      
+<link rel="stylesheet" href="/css/rtl.css">
 
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta charset="utf-8">
-
-  
-  <title>新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象</title>
-  
-  <link rel="canonical" href="http://example.com/2020/12/07/is-js-object-oriented-or-object-based/">
-  
-  <meta name="description" content="前言这篇文章所涉及的知识基本上是我早就掌握了的，但是这次我尝试带着问题，从另一个角度去学习、探索 「JavaScript 为什么是面向对象语言」？ 两个问题在这之前，我们先明确两个问题。JavaScript 中，有许许多多的对象，但是在 ES6 之前，JavaScript 没有类的概念。 即使到了 ">
-  
-  
-  <meta name="author" content="John Doe">
-  
-  <meta property="og:image" content="http://example.comundefined">
-  
-  <meta property="og:site_name" content="Hey Guys." />
-  <meta property="og:type" content="article" />
-  <meta property="og:title" content="新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象" />
-  
-  <meta property="og:description" content="前言这篇文章所涉及的知识基本上是我早就掌握了的，但是这次我尝试带着问题，从另一个角度去学习、探索 「JavaScript 为什么是面向对象语言」？ 两个问题在这之前，我们先明确两个问题。JavaScript 中，有许许多多的对象，但是在 ES6 之前，JavaScript 没有类的概念。 即使到了 ">
-  
-  <meta property="og:url" content="http://example.com/2020/12/07/is-js-object-oriented-or-object-based/" />
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象">
-  
-  <meta name="twitter:description" content="前言这篇文章所涉及的知识基本上是我早就掌握了的，但是这次我尝试带着问题，从另一个角度去学习、探索 「JavaScript 为什么是面向对象语言」？ 两个问题在这之前，我们先明确两个问题。JavaScript 中，有许许多多的对象，但是在 ES6 之前，JavaScript 没有类的概念。 即使到了 ">
-  
-  
-  <meta name="twitter:image" content="http://example.comundefined">
-  
-  <meta name="twitter:url" content="http://example.com/2020/12/07/is-js-object-oriented-or-object-based/" />
-
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-
-  <!-- Preload fonts
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="preload" href="../fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="../fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
-
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  
-<link rel="stylesheet" href="/css/normalize.css">
-
-  
-<link rel="stylesheet" href="/css/skeleton.css">
-
-  
-<link rel="stylesheet" href="/css/custom.css">
-
-  
-<link rel="stylesheet" href="/css/prism-dark.css">
-
-  
-<link rel="stylesheet" href="/css/prism-line-numbers.css">
-
-  <!-- User css -->
-  
-  
-<link rel="stylesheet" href="/css/user.css">
-
-  
-
-  <!-- Favicon
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="icon" type="image/png" href="/images/favicon.png">
-
-  <!-- Custom Theme Color Style
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <style>
-  a:not(.icon) {
-    text-decoration-color: #D23669;
-    background-image: linear-gradient(
-      to bottom,
-      rgba(0, 0, 0, 0) 50%,
-      #D23669 50%
-    );
-  }
-  blockquote {
-    border-left: 8px solid #D23669;
-  }
-  .nanobar .bar {
-    background: #D23669;
-  }
-  .button.button-primary:hover,
-  button.button-primary:hover,
-  input[type="submit"].button-primary:hover,
-  input[type="reset"].button-primary:hover,
-  input[type="button"].button-primary:hover,
-  .button.button-primary:focus,
-  button.button-primary:focus,
-  input[type="submit"].button-primary:focus,
-  input[type="reset"].button-primary:focus,
-  input[type="button"].button-primary:focus {
-    background-color: #D23669;
-    border-color: #D23669;
-  }
-  input[type="email"]:focus,
-  input[type="number"]:focus,
-  input[type="search"]:focus,
-  input[type="text"]:focus,
-  input[type="tel"]:focus,
-  input[type="url"]:focus,
-  input[type="password"]:focus,
-  textarea:focus,
-  select:focus {
-    border: 1px solid #D23669;
-  }
-</style>
-
-  <!-- Google Analytics (With Privacy Settings On)
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  
-
+    
+    <!-- rss -->
+    
+    
 <meta name="generator" content="Hexo 5.2.0"></head>
 
-<body>
-  <div class="container">
-    <div class="row">
-      <div>
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2020/12/04/some-types-in-js/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&text=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&title=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&is_video=false&description=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象&body=Check out this article: http://example.com/2020/12/07/is-js-object-oriented-or-object-based/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&title=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&title=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&title=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&title=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&name=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&t=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
 
-        <div class="row">
-  <div class="two columns" style="max-width: 50px">
-    <h1 class="mt-2 mode">
-      <div onclick=setDarkMode(true) id="darkBtn">🌑</div>
-      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
-      <script >
-        if (localStorage.getItem('preferredTheme') == 'dark') {
-          setDarkMode(true)
-        }
-        function setDarkMode(isDark) {
-          var darkBtn = document.getElementById('darkBtn')
-          var lightBtn = document.getElementById('lightBtn')
-          if (isDark) {
-            lightBtn.style.display = "block"
-            darkBtn.style.display = "none"
-            localStorage.setItem('preferredTheme', 'dark');
-          } else {
-            lightBtn.style.display = "none"
-            darkBtn.style.display = "block"
-            localStorage.removeItem('preferredTheme');
-          }
-          document.body.classList.toggle("darkmode");
-        }
-      </script>
-    </h1>
-  </div>
-
-  <div class="six columns ml-1">
-    <h1 class="mt-2">
-      Hey Guys.
-    </h1>
-  </div>
-
-  <div class="twelve columns">
-    <div class="row">
-      <div class="nine columns left">
-        <a href="/">Home</a>
-        
-          
-          <a href="/about" class="ml">About</a>
-          
-        
-        
-          
-            <a href="mailto:505421473@qq.com" target="_blank" class="ml">Email</a>
-          
-        
-      </div>
     </div>
-    <hr style="margin-bottom: 2.6rem">
-  </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%A4%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">两个问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1"><span class="toc-number">3.</span> <span class="toc-text">什么是面向对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript-%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%89%B9%E5%BE%81"><span class="toc-number">4.</span> <span class="toc-text">JavaScript 对象的特征</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%85%B7%E6%9C%89%E5%94%AF%E4%B8%80%E6%A0%87%E8%AF%86%E6%80%A7"><span class="toc-number">4.1.</span> <span class="toc-text">对象具有唯一标识性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E3%80%81%E8%A1%8C%E4%B8%BA"><span class="toc-number">4.2.</span> <span class="toc-text">状态、行为</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript-%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%A4%E7%B1%BB%E5%B1%9E%E6%80%A7"><span class="toc-number">5.</span> <span class="toc-text">JavaScript 对象的两类属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%B1%9E%E6%80%A7"><span class="toc-number">5.1.</span> <span class="toc-text">数据属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E5%99%A8%E5%B1%9E%E6%80%A7%EF%BC%88getter-setter%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">访问器属性（getter&#x2F;setter）</span></a></li></ol></li></ol>
+    </div>
+  </span>
 </div>
 
-        <div class="trans">
-            <h2>新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象</h2>
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象
+    </h1>
 
-  <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这篇文章所涉及的知识基本上是我早就掌握了的，但是这次我尝试带着问题，从另一个角度去学习、探索 「JavaScript 为什么是面向对象语言」？</p>
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">John Doe</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2020-12-07T07:47:40.000Z" itemprop="datePublished">2020-12-07</time>
+        
+      
+    </div>
+
+
+      
+
+      
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这篇文章所涉及的知识基本上是我早就掌握了的，但是这次我尝试带着问题，从另一个角度去学习、探索 「JavaScript 为什么是面向对象语言」？</p>
 <h2 id="两个问题"><a href="#两个问题" class="headerlink" title="两个问题"></a>两个问题</h2><p>在这之前，我们先明确两个问题。JavaScript 中，有许许多多的对象，但是在 ES6 之前，JavaScript 没有<strong>类</strong>的概念。</p>
 <p>即使到了 ES6，类的实现也仅仅是一个语法糖，ES6 中的类的绝大部分功能，ES5 都可以做到。新的 <code>class</code> 也只是让对象原型的写法更加清晰、更像面向对象编程的语法而已。</p>
 <p>另外，JavaScript 语言相较于 Java 等语言来说，是比较自由的（PHP 也很自由），可以任意、随时的添加属性，修改对象。</p>
@@ -262,58 +219,142 @@ obj<span class="token punctuation">.</span>a<span class="token punctuation">;</s
 <p>但是同时，JavaScript 又提供了完全运行时的对象系统，使得它可以模仿多数面向对象编程范式，所以，在这一点上，也可以认为「JavaScript 也是面向对象语言」。</p>
 <p><strong>同时，JavaScript 语言标准也已经明确说明，JavaScript 是一门面向对象语言</strong>。</p>
 
-  <p> — Dec 7, 2020</p>
-  
+  </div>
+</article>
 
 
-          <div class="row mt-2">
-  
-    <div class="eight columns">
-      <p id="madewith">Made with ❤ and
-        <a class="footer-link icon" href="https://hexo.io" target="_blank" style="text-decoration: none;" rel="noreferrer" aria-label="Hexo.io">
-        <svg class="hexo svg-hov" width="14" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>Hexo.js</title><path d="M12 .007L1.57 6.056V18.05L12 23.995l10.43-6.049V5.952L12 .007zm4.798 17.105l-.939.521-.939-.521V12.94H9.08v4.172l-.94.521-.938-.521V6.89l.939-.521.939.521v4.172h5.84V6.89l.94-.521.938.521v10.222z"/></svg>
-        </a>
+
         
-        at <a href="https://en.wikipedia.org/wiki/Earth" target="_blank" rel="noreferrer">Earth</a>.</p>
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
         
+      </ul>
     </div>
 
-    <!-- Sepcial thanks to https://simpleicons.org/ for the icons -->
-    <div class="four columns mb-3 posisi" >
-      
-      <a class="ml-0 footer-link icon" href="https://github.com/imhxc" target="_blank" style="text-decoration: none" rel="noreferrer" aria-label="GitHub">
-        <svg class="github svg-hov" width="18" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-      </a>
-      
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%A4%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">两个问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1"><span class="toc-number">3.</span> <span class="toc-text">什么是面向对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript-%E5%AF%B9%E8%B1%A1%E7%9A%84%E7%89%B9%E5%BE%81"><span class="toc-number">4.</span> <span class="toc-text">JavaScript 对象的特征</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%85%B7%E6%9C%89%E5%94%AF%E4%B8%80%E6%A0%87%E8%AF%86%E6%80%A7"><span class="toc-number">4.1.</span> <span class="toc-text">对象具有唯一标识性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8A%B6%E6%80%81%E3%80%81%E8%A1%8C%E4%B8%BA"><span class="toc-number">4.2.</span> <span class="toc-text">状态、行为</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript-%E5%AF%B9%E8%B1%A1%E7%9A%84%E4%B8%A4%E7%B1%BB%E5%B1%9E%E6%80%A7"><span class="toc-number">5.</span> <span class="toc-text">JavaScript 对象的两类属性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%B1%9E%E6%80%A7"><span class="toc-number">5.1.</span> <span class="toc-text">数据属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BF%E9%97%AE%E5%99%A8%E5%B1%9E%E6%80%A7%EF%BC%88getter-setter%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">访问器属性（getter&#x2F;setter）</span></a></li></ol></li></ol>
+    </div>
 
-      
-
-      
-
-      
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&text=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&title=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&is_video=false&description=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象&body=Check out this article: http://example.com/2020/12/07/is-js-object-oriented-or-object-based/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&title=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&title=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&title=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&title=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&name=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=http://example.com/2020/12/07/is-js-object-oriented-or-object-based/&t=新瓶装旧酒，从另一个角度去理解 JavaScript 面向对象"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
 
     </div>
-  
-</div>
 
-        </div>
-      </div>
-
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
     </div>
 
   </div>
-  <script src="/js/nanobar.min.js"></script>
-  <script>
-    var options = {
-      classname: 'nanobar',
-      id: 'myNanobar'
-    };
-    var nanobar = new Nanobar(options);
-    nanobar.go(30);
-    nanobar.go(76);
-    nanobar.go(100);
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2016-2020
+    John Doe
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/about/">About</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/projects_url">Projects</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+
+    <!-- jquery -->
+
+<script src="/lib/jquery/jquery.min.js"></script>
+
+
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+
+<!-- clipboard -->
+
+  
+<script src="/lib/clipboard/clipboard.min.js"></script>
+
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
   </script>
 
-</body>
 
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Umami Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
 </html>
