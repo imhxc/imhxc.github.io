@@ -8,7 +8,6 @@ import Bio from "../components/Bio";
 
 
 export default function BlogPost(props) {
-  console.log('data: ', props)
   const { data, location } = props
   const post = data.mdx
   return (

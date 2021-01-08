@@ -33,6 +33,7 @@
   "license": "0BSD",
   "scripts": {
     "build": "gatsby build",
+    "deploy": "gatsby build && gh-pages -d public -b master",
     "develop": "gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run develop",

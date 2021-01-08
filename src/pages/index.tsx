@@ -16,7 +16,6 @@ const IndexPage = (props) => {
     edges,
     totalCount
   } } = data
-  console.log('props: ', props)
   return (
     <Layout location={location} title={"Isaac's Blog"}>
       <aside>
