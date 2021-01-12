@@ -34,8 +34,8 @@ npm i
 npm run sync
 // 构建静态页面 输出到public目录下
 npm run build
-// 查看html页面
-cd public
+// 部署到 github master 上
+npm run deploy
 ```
 
 生成了 html 文件后，想怎么部署的方式都可以了。作者使用了 [vercel](https://vercel.com/) 这个平台去部署。
