@@ -1,11 +1,8 @@
 import React from "react"
 import { graphql, Link } from "gatsby"
 
-import Layout from "../components/Layout.tsx"
-import Image from "../components/image"
-import get from 'lodash/get';
-import { formatPostDate, formatReadingTime } from '../utils/helpers';
-import SEO from "../components/seo"
+import Layout from '../components/Layout.tsx'
+import { formatPostDate, formatReadingTime } from '../utils/helpers'
 import { rhythm } from '../utils/typography';
 import Bio from "../components/Bio";
 import Footer from "../components/Footer";
@@ -32,6 +29,7 @@ const IndexPage = (props) => {
               <header>
                 <h3
                   style={{
+                    color: 'var(--textTitle)',
                     fontFamily: 'Montserrat, sans-serif',
                     fontSize: rhythm(1),
                     marginBottom: rhythm(1 / 4),

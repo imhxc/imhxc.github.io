@@ -32,6 +32,7 @@ class Layout extends React.Component {
         >
           <Link
             style={{
+              fontFamily: 'Montserrat, sans-serif',
               boxShadow: 'none',
               textDecoration: 'none',
               color: 'var(--textTitle)',
