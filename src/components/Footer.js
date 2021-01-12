@@ -25,8 +25,8 @@ class Footer extends React.Component {
           </>
         )}
         &bull;{' '}
-        <a href="https://github.com/sl1673495/sync-overreacted" target="_blank" rel="noopener noreferrer">
-          生成你的专属博客
+        <a href="mailto:505421473@qq.com">
+          Email
         </a>
       </footer>
     );
